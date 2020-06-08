@@ -51,11 +51,11 @@ We want to create a standard rig that can be loaded in a Unity app on iOS using 
 6. You can now use this rig file in many applications through [rig2c](rig2c.md)
 
 ## C++ classes
- - [Pose](kp2rig/src/Pose.hpp): Interface representing a pose in time for a single object, often initialized with keypoints. Implementations include _KpPoseMpii_16_, _KpPoseMpii_20_, and _BallPose_.
- - [Rig](common/Rig.hpp): Data class representing the standard output rig. All _Pose_ objects are required to generate a single _Rig_.
- - [RigPose](kp2rig/src/RigPose.hpp): Wrapper (almost decorator) providing additional members and functions for the _Rig_ class.
- - [AnimatedRig](kp2rig/src/AnimatedRig.hpp): Contains all frames (poses) for an object. Provides tools to smooth, fill in, and write data.
- - [Animation](kp2rig/src/Animation.hpp): Analagous to a scene, this is the highest-level class containing all AnimatedRigs.
+ - [Pose](../kp2rig/src/Pose.hpp): Interface representing a pose in time for a single object, often initialized with keypoints. Implementations include _KpPoseMpii_16_, _KpPoseMpii_20_, and _BallPose_.
+ - [Rig](../common/Rig.hpp): Data class representing the standard output rig. All _Pose_ objects are required to generate a single _Rig_.
+ - [RigPose](../kp2rig/src/RigPose.hpp): Wrapper (almost decorator) providing additional members and functions for the _Rig_ class.
+ - [AnimatedRig](../kp2rig/src/AnimatedRig.hpp): Contains all frames (poses) for an object. Provides tools to smooth, fill in, and write data.
+ - [Animation](../kp2rig/src/Animation.hpp): Analagous to a scene, this is the highest-level class containing all AnimatedRigs.
 
 ## Workflow
 There are two threads of operation:
