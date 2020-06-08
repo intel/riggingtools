@@ -109,8 +109,8 @@ The rest pose, or bind pose, is defined as a [T-pose](https://en.wikipedia.org/w
  - legs rotated about the Z axis 180 degrees (π) from the pelvis/spine1 vector
  - ankle rotated about the X axis 70 degrees (π*7/18) from the leg
  - toebase rotated about the X axis 20 degrees (π/9) from the ankle
-![T-Pose front](img/t-pose1.png)
-![T-Pose side](img/t-pose2.png)
+![T-Pose front](/img/t-pose1.png)
+![T-Pose side](/img/t-pose2.png)
 
 # Other rigs
 ### Ball
