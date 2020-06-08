@@ -1,0 +1,42 @@
+{
+    "version": "0.3.0",
+    "header": {
+       "startFrame": 120,
+       "endFrame": 149,
+       "fps": 30.0,
+       "units": 0.1
+    },
+    "rigs": [ {
+       "id": "player1",
+       "type": "athelete",
+       "name": "johnny-boy",
+       "loc": "<ROOT_LOCATIONS>",
+       "boneLen": "<BONE_LENGTHS>",
+       "boneRot": "<BONE_ROTATIONS>",
+       "boneOff": "<BONE_OFFSETS>",
+       "numRot": 20,
+       "numOff": 4,
+       "numLen": 20
+    }, {
+       "id": "player2",
+       "type": "athelete",
+       "name": "johnny-appleseed",
+       "startFrame": 121,
+       "endFrame": 146,
+       "loc": "<ROOT_LOCATIONS>",
+       "boneLen": "<BONE_LENGTHS>",
+       "boneRot": "<BONE_ROTATIONS>",
+       "boneOff": "<BONE_OFFSETS>",
+       "numRot": 20,
+       "numOff": 4,
+       "numLen": 20
+    }, {
+       "id": "ball",
+       "type": "ball",
+       "name": "ball",
+       "loc": "<ROOT_LOCATIONS>",
+       "numRot": 1,
+       "boneRot": "<BONE_ROTATIONS>"
+    } ]
+ }
+ 

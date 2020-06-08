@@ -1,0 +1,11 @@
+zfp/src/CMakeLists.txt was modified to compile zfp as a static library:
+
+  add_library(zfp ${zfp_source} ${zfp_cuda_backend_obj})
+
+became:
+
+  add_library(zfp STATIC ${zfp_source} ${zfp_cuda_backend_obj})
+
+and was compiled using CMAKE as follows:
+
+cmake .. -DCMAKE_TOOLCHAIN_FILE=~/code/android-ndk-r20b/build/cmake/android.toolchain.cmake -DZFP_WITH_OPENMP=OFF

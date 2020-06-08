@@ -1,0 +1,130 @@
+{
+   "mpii": {
+      "description": "http://human-pose.mpi-inf.mpg.de/#download",
+      "type": "humanoid",
+      "layout": [
+         "rightAnkle",
+         "rightKnee",
+         "rightHip",
+         "leftHip",
+         "leftKnee",
+         "leftAnkle",
+         "pelvis",
+         "baseNeck",
+         "baseHead",
+         "topHead",
+         "rightWrist",
+         "rightElbow",
+         "rightShoulder",
+         "leftShoulder",
+         "leftElbow",
+         "leftWrist"
+      ]
+   },
+   "mpii_20": {
+      "description": "Same as MPII but with two additional keypoints for each foot",
+      "type": "humanoid",
+      "layout": [
+         "rightAnkle",
+         "rightKnee",
+         "rightHip",
+         "leftHip",
+         "leftKnee",
+         "leftAnkle",
+         "pelvis",
+         "baseNeck",
+         "baseHead",
+         "topHead",
+         "rightWrist",
+         "rightElbow",
+         "rightShoulder",
+         "leftShoulder",
+         "leftElbow",
+         "leftWrist",
+         "leftToe",
+         "rightToe",
+         "leftHeel",
+         "rightHeel"
+      ]
+   },
+   "coco": {
+      "description": "http://cocodataset.org/#download. Keypoint layout defined in person_keypoints_val2017.json from 'Train/Val annotations' dataset",
+      "type": "humanoid",
+      "layout": [
+         "nose",
+         "leftEye",
+         "rightEye",
+         "leftEar",
+         "rightEar",
+         "leftShoulder",
+         "rightShoulder",
+         "leftElbow",
+         "rightElbow",
+         "leftWrist",
+         "rightWrist",
+         "leftHip",
+         "rightHip",
+         "leftKnee",
+         "rightKnee",
+         "leftAnkle",
+         "rightAnkle"
+      ]
+   },
+   "openPose_19": {
+      "description": "https://github.com/CMU-Perceptual-Computing-Lab/openpose",
+      "type": "humanoid",
+      "layout": [
+         "nose",
+         "baseNeck",
+         "rightShoulder",
+         "rightElbow",
+         "rightWrist",
+         "leftShoulder",
+         "leftElbow",
+         "leftWrist",
+         "rightHip",
+         "rightKnee",
+         "rightAnkle",
+         "leftHip",
+         "leftKnee",
+         "leftAnkle",         
+         "rightEye",
+         "leftEye",
+         "rightEar",
+         "leftEar",
+         "background"
+      ]
+   },
+   "mop_19": {
+      "description": "'Modified OpenPose'. This is a 19-keypoint layout based loosely on OpenPose",
+      "type": "humanoid",
+      "layout": [
+         "topHead",
+         "baseNeck",
+         "rightShoulder",
+         "rightElbow",
+         "rightWrist",
+         "leftShoulder",
+         "leftElbow",
+         "leftWrist",
+         "rightHip",
+         "rightKnee",
+         "rightAnkle",
+         "leftHip",
+         "leftKnee",
+         "leftAnkle",
+         "rightEar",
+         "rightEye",
+         "nose",
+         "leftEye",
+         "leftEar"
+      ]
+   },
+   "solidObject": {
+      "description": "Single-joint object such as a ball",
+      "type": "solidObject",
+      "layout" : [
+         "centerOfMass"
+      ]
+   }
+}

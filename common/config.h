@@ -1,0 +1,9 @@
+#ifndef INCLUDE_GUARD
+#define INCLUDE_GUARD
+
+#define MY_VERSION  "0.5.0"
+#define MY_VERSION_MAJOR "0"
+#define MY_VERSION_MINOR "5"
+#define MY_VERSION_PATCH "0"
+
+#endif // INCLUDE_GUARD
