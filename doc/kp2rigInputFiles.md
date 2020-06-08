@@ -18,12 +18,12 @@ Since CSV has no mechanism for defining schemas, the format is rigid and a bit r
 File-headers are not allowed, meaning every row must contain all the metadata it needs.
 
 Each row in the CSV file/stdin stream must be formatted as follows:
- - FIELD 1 is *keypoint type*. Must match an entry in ['kpDescriptor.json'](#kpDescriptorjson)
+ - FIELD 1 is *keypoint type*. Must match an entry in [kpDescriptor.json](#kpDescriptorjson)
  - FIELD 2 is *unique ID* of the character. Can be anything: human1, ball, John, etc.
  - FIELD 3 is *custom data*. This can be anything you want as long as there are no commas or colons
  - FIELD 4 is *frame number*. This must be an integer that increases with every row (frame). It's okay to miss/skip frames but never go backwards. In the future this could be a more complicated timestamp
  - Field 5 is a colon (:).  This marks the end of the header and beginning of actual `XYZ` data. A comma isn't needed between FIELD 4 and the colon.
- - Field 6-N is the data, laid out as defined in ['kpDescriptor.json'](#kpDescriptorjson).
+ - Field 6-N is the data, laid out as defined in [kpDescriptor.json](#kpDescriptorjson).
 
 An example of the first few rows in a CSV file represnting a single character might look like:
 ```file
