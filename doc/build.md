@@ -7,7 +7,7 @@ The client-side rig2c* tools can be built for Linux, macOS, Windows, iOS, and An
  - run cmake
  - run the build tool (make, visual studio, etc.)
 
-All output files are placed in the repository's `bin` folder. [kp2rig](doc/kp2rig.md) requires [additional setup](doc/kp2rig.md) to run.
+All output files are placed in the repository's `bin` folder. [kp2rig](/doc/kp2rig.md) requires [additional setup](/doc/kp2rig.md) to run.
 
 ### Python
 An installation of python-dev is optional and not required for Blender because Blender provides a local installation.
@@ -67,9 +67,9 @@ iOS only supports client-side utilities and not python.
 ### Build all projects
  - `cmake . -G Xcode -DCMAKE_SYSTEM_NAME=iOS`
  - Open the created project in Xcode
- - Select a Development Team for the target 'testIos': ![Set the Development Team](img/testIos_devTeam.png)
- - Change the target device from 'My Mac' to the device/simulator you are building for (this won't build for macOS): ![Set the Target Device](img/testIos_setDevice.png)
- - Add a Copy Bundle Resources phase to 'testIos': ![Add build phase](img/testIos_addBuildPhase.png)
+ - Select a Development Team for the target 'testIos': ![Set the Development Team](/img/testIos_devTeam.png)
+ - Change the target device from 'My Mac' to the device/simulator you are building for (this won't build for macOS): ![Set the Target Device](/img/testIos_setDevice.png)
+ - Add a Copy Bundle Resources phase to 'testIos': ![Add build phase](/img/testIos_addBuildPhase.png)
  - Drag-and-drop a rig file to this new build phase
 
 ## Android
