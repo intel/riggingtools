@@ -73,8 +73,3 @@ Depends on python helper scripts from [rig2py](rig2py/py/), matplotlib, and math
 
 ## License
 MIT license, see the [LICENSE](LICENSE) file for details.
-
-------
-Enjoy!
-
--John Harrison
