@@ -17,7 +17,7 @@
 This is a collection of tools bridging the gap between 3D skeletal keypoints and anything that consumes them.
 
 The term ["rig"](doc/generated-rigs.md) is used to define the underlying structure of anything animatable, including humans skeletons, balls (considered a rig with single joint in center), hand-held objects (such as lacrosse sticks), etc;
-however, the focus is on creating hierarchical human skeletal rigs with a well-defined root joint.
+however, the focus is on creating hierarchical human skeletal rigs with well-defined root joints.
 
 These tools can help with:
  - converting 3-dimensional keypoints into well-defined and kinematically-correct animatable rigs
