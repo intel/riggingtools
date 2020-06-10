@@ -63,43 +63,7 @@ There are two threads of operation:
  - Process and write
  
 ### Parse thread
-<!---
-```mermaid
-graph TD;
-1["Read from file or stdin"]-->2;
-2["Parse data as a stream, instantiating a Pose class for each frame parsed"]-->3
-3["Add each frame Pose to an AnimatedRig, and each AnimatedRig to the single Animation"]
-```
---->
+![Parse thread diagram](/img/parseThread.svg)
 
 ### Process and Write thread
-<!---
-```mermaid
-graph TD;
-1["data needs to be written?"]-->2
-1-->3
-2["No"]-->1
-3["Yes"]-->4
-4["fill in missing frames. For each contiguous block of missing frames, how many are missing?"]-->5
-4-->6
-5["less than or same as [missing-frame-threshold]"]-->7
-6["more than [missing-frame-threshold]"]-->8
-7["generate rigs from poses on either side of the missing data"]-->9
-8["copy the previously available Pose object for each missing frame, don't try to interpolate"]-->11
-9["generate interpolated rigs for each missing frame, using quaternion SLERP for joints and simple linear interpolation for pelvis location"]-->10
-10["for each interpolated rig, back-generate a pose so we have what original XYZ data could have been"]-->11
-11["insert generated Pose objects into the AnimatedRig"]-->12
-12["smooth the data?"]-->13
-13["Yes"]-->15
-14["No"]-->16
-12-->14
-15["Smooth the original XYZ data"]-->16
-16["Generate all rigs from XYZ data"]-->17
-17["smooth the data?"]-->18
-18["Yes"]-->20
-19["No"]-->21
-17-->19
-20["Smooth the roll (twist) for certain joints"]-->21
-21["Save all smoothed rigs in a single file or file segment"]
-```
---->
+![Process thread diagram](/img/processThread.svg)
