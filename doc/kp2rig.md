@@ -63,14 +63,17 @@ There are two threads of operation:
  - Process and write
  
 ### Parse thread
+<!---
 ```mermaid
 graph TD;
 1["Read from file or stdin"]-->2;
 2["Parse data as a stream, instantiating a Pose class for each frame parsed"]-->3
 3["Add each frame Pose to an AnimatedRig, and each AnimatedRig to the single Animation"]
 ```
+--->
 
 ### Process and Write thread
+<!---
 ```mermaid
 graph TD;
 1["data needs to be written?"]-->2
@@ -99,3 +102,4 @@ graph TD;
 20["Smooth the roll (twist) for certain joints"]-->21
 21["Save all smoothed rigs in a single file or file segment"]
 ```
+--->
