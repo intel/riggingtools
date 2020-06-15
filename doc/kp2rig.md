@@ -50,7 +50,7 @@ We want to create a standard rig that can be loaded in a Unity app on iOS using 
 Here are additional options not used in this example. The best way to view these is to run `./kp2rig` without any arguments:
 |  |  |
 | ------ | ------ |
-| `-o` | Set the output directory for the rig file. Default is the working directory | 
+| `-o` | Set the output directory for the rig file (or rig file segments). Default is the working directory | 
 | `-r` | Frames-per-second (fps). Default is 30 | 
 | `--smooth <value>` | Specify the smoothing algorithm {`none`\|`lpf_ipp`}. Defaul is `lpf_ipp` |
 | `--max-gap <value>` | Maximum gap, in seconds, of missing frames to interpolate. Gaps larger than this will not interpolate but instead copy/paste the previous frame, resulting in a "freeze". Default is `0.5` |
