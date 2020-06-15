@@ -11,6 +11,7 @@
   - [**Input files**](doc/kp2rigInputFiles.md)
   - [**Output files**](doc/generated-rigs.md)
 - [**rig2c**](doc/rig2c.md)
+- [**Contribute**](/CONTRIBUTING.md)
 
 # About
 
