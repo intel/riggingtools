@@ -95,7 +95,7 @@ int main( int argc, char *argv[] )
    app.add_option( "-o,--outdir", args.outputDirectory, "Set the output directory for the rig file (or rig file segments). Default is the working directory\n" );
    app.add_option( "-r,--rate", args.fps, "Frames-per-second (fps). Default is 30\n" );
    app.add_option( "--segsize", args.segmentDuration, "Segment duration in seconds. Default is 0, meaning output a monolithic file\n" );
-   app.add_option( "-u,--units", args.unitMeterNorm, "Value representing a fraction of a meter; I.E., a multiplier from your units to 1 meter. Default is 1.0\n" );
+   app.add_option( "-u,--units", args.unitMeterNorm, "\"Normalization\" value used to convert input units to meters; E.g., if your input data uses units of decimeters then you would pass in a value of 0.1. Default is 1.0 (meters)\n" );
    
    // The default arguments are files or a directory
    std::vector< std::string > filesOrDirectory;
