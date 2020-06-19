@@ -25,7 +25,7 @@ These tools can:
  - package rigs into files for archival, sharing, or Internet streaming
  - import rigs into custom code, custom scripts, game engines, and animation software
  
-These tools _cannot_ create 3D keypoints from images; instead they help visualize and process 3d keypoints after you have created them.
+These tools _cannot_ generate 3D keypoints from mocap suits, depth cameras, videos or images; instead they help visualize and process 3d keypoints after you have generated them.
 
 Design goals for these tools include:
  - require minimum 3rd-party code dependencies for better portability. Distribute dependencies in build tree where possible but allow developers to choose their own dependencies
