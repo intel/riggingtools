@@ -17,13 +17,15 @@
 
 This is a collection of tools bridging the gap between 3D skeletal keypoints and anything that consumes them.
 
-The term ["rig"](doc/generated-rigs.md) is used to define the underlying structure of anything animatable, including humans skeletons, balls (considered a rig with single joint in center), hand-held objects (such as lacrosse sticks), etc;
+The term ["rig"](doc/generated-rigs.md) is used to define the underlying structure of anything animatable, including humans skeletons, balls (considered a rig with single joint in center), independent objects, etc;
 however, the focus is on creating hierarchical human skeletal rigs with well-defined root joints.
 
-These tools can help with:
- - converting 3-dimensional keypoints into well-defined and kinematically-correct animatable rigs
- - packaging rigs into files for archival, sharing, or Internet streaming
- - importing rigs into custom code, custom scripts, game engines, and animation software
+These tools can:
+ - convert 3-dimensional keypoints into well-defined and kinematically-correct animatable rigs
+ - package rigs into files for archival, sharing, or Internet streaming
+ - import rigs into custom code, custom scripts, game engines, and animation software
+ 
+These tools _cannot_ create 3D keypoints from images; instead they help visualize and process 3d keypoints after you have created them.
 
 Design goals for these tools include:
  - require minimum 3rd-party code dependencies for better portability. Distribute dependencies in build tree where possible but allow developers to choose their own dependencies
