@@ -47,6 +47,16 @@ We want to create a standard rig that can be loaded in a Unity app on iOS using 
 | `-u 0.1` | We told kp2rig how to get values converted to meters. In this example the 3d keypoints in the text files had units of decimeters, so multiplying by 0.1 gets values converted to meters. | 
 | `--left` | We told kp2ig that we want the rig to be a _left-handed coordinate system_, which matches what Unity expects (every software is different FYI) | 
 
+Here are additional options not used in this example. The best way to view these is to run `./kp2rig` without any arguments:
+|  |  |
+| ------ | ------ |
+| `-o` | Set the output directory for the rig file (or rig file segments). Default is the working directory | 
+| `-r` | Frames-per-second (fps). Default is 30 | 
+| `--smooth <value>` | Specify the smoothing algorithm {`none`\|`lpf_ipp`}. Defaul is `lpf_ipp` |
+| `--max-gap <value>` | Maximum gap, in seconds, of missing frames to interpolate. Gaps larger than this will not interpolate but instead copy/paste the previous frame, resulting in a "freeze". Default is `0.5` |
+| -s | Read from STDIN instead of files. This is useful for live streaming |
+| --segsize <value> | _WIP_ Segment duration in seconds. Default is `0`, meaning output a monolithic file |
+
 5. If all goes well, you should have a new `seg_<start_timestamp>.json` file in your directory - this is your rig file
 6. You can now use this rig file in many applications through [rig2c](rig2c.md)
 
