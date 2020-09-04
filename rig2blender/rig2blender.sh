@@ -75,6 +75,6 @@ rsync -r -u $SCRIPT_DIR/../bin/$PLATFORM_STR/$MODULE_NAME $BLENDER_ADDONS_PATH/
 #  2) The path to the rig2pyHelper script
 MODULE_PATHS="$SCRIPT_DIR;$SCRIPT_DIR/../rig2py/py"
 
-# Start our python scripts FROM blender running in the background
+# Start our python scripts FROM blender
 IMPORTANT_PYTHON_FILE="$SCRIPT_DIR/rig2blender.py"
 $BLENDER_CMD --python $IMPORTANT_PYTHON_FILE -- $@ -s $MODULE_PATHS

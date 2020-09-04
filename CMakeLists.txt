@@ -1,8 +1,11 @@
-# Only in-source builds are supported.
-#
 # Native build from the project's root-folder:
 #   cmake .
 #   make
+#
+# Better yet, create a build folder and build from there:
+#   mkdir build
+#   cd build
+#   cmake ..
 
 cmake_minimum_required( VERSION 3.14 )
 
