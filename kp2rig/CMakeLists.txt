@@ -1,4 +1,5 @@
 project( kp2rig )
+add_executable( kp2rig src/main.cpp )
 
 # Copy our default kpDescriptor.json file to the binary directory, if it doesn't already exist there
 if ( EXISTS '${BIN_DIR}/kpDescriptor.json')
@@ -20,13 +21,11 @@ else()
     find_package( Threads )
 endif()
 
-# Require IPP
+# Include IPP filtering?
 if ( EXISTS ${IPP_PATH} )
-   else()
-      MESSAGE( "*** Could not find Intel IPP, make sure it is installed here:" )
-      MESSAGE( "***   ${IPP_PATH}" )
-      MESSAGE( FATAL_ERROR "" )
-   endif()
+   MESSAGE( "Found Intel Integrated Performance Primitives (${IPP_PATH})" )
+   target_compile_definitions( kp2rig PRIVATE HAVE_IPP )
+endif()
 
 include_directories(
    ${PROJECT_SOURCE_DIR}/../common
@@ -34,8 +33,6 @@ include_directories(
    ${IPP_PATH}/include
    ${APR_UTIL_INCLUDE_DIRS}
    ${GLIB2_INCLUDE_DIRS} )
-   
-add_executable( kp2rig src/main.cpp )
 
 target_sources( kp2rig
    PRIVATE

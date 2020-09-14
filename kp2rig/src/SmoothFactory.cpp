@@ -11,7 +11,7 @@ Smooth::SMOOTH_TYPE SmoothFactory::SmoothType( std::string type )
       { "none",      Smooth::SMOOTH_TYPE_NONE },
       { "lpf_ipp",   Smooth::SMOOTH_TYPE_LPF_IPP }
    };
-   
+
    auto it = map.find( type );
    if ( it == map.end() )
       return Smooth::SMOOTH_TYPE_NONE;
@@ -23,7 +23,9 @@ std::unique_ptr< Smooth > SmoothFactory::Create( Smooth::SMOOTH_TYPE type )
    // Create a new importer
    switch ( type )
    {
+#ifdef HAVE_IPP
       case Smooth::SMOOTH_TYPE_LPF_IPP: return std::unique_ptr< Smooth >( new Smooth_lpfIpp() );
+#endif
       default: return std::unique_ptr< Smooth >( nullptr );
    }
 }

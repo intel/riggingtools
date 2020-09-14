@@ -1,8 +1,10 @@
 #ifndef Smooth_lpfIpp_hpp
 #define Smooth_lpfIpp_hpp
 
-#include "Smooth.hpp"
+#ifdef HAVE_IPP
 
+#include "Smooth.hpp"
+asdasdf
 class Smooth_lpfIpp : public Smooth
 {
 public:
@@ -35,4 +37,6 @@ inline int Smooth_lpfIpp::GetSampleShift() const
 {
    return (_numTaps - 1)/2;
 }
+#endif
+
 #endif
