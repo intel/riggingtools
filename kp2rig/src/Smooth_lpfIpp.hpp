@@ -4,7 +4,7 @@
 #ifdef HAVE_IPP
 
 #include "Smooth.hpp"
-asdasdf
+
 class Smooth_lpfIpp : public Smooth
 {
 public:

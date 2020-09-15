@@ -8,6 +8,7 @@
 #include <fstream>
 #include <iostream>
 #include <sstream>
+#include "config.h"
 #include "Utility.hpp"
 #include "Animation.hpp"
 #include "PoseFactory.hpp"
@@ -34,6 +35,7 @@ struct Args
    double maxGap = 0.5;
    bool useLeftHandCoords = false;
    bool stream = false;
+   bool printVersion = false;
 } args;
 
 #ifndef STDIN
@@ -88,6 +90,7 @@ int main( int argc, char *argv[] )
    // Process command-line arguments
    CLI::App app{ "App description" };
    
+   app.add_flag( "--version", args.printVersion, "Prints the version string" );
    app.add_flag( "-l,--left", args.useLeftHandCoords, "Output a left-handed coordinate system. Default is right\n");
    auto * streamOption = app.add_flag( "-s,--stream", args.stream, "Read from STDIN instead of files. This is useful for live streaming\n" );
    app.add_option( "--max-gap", args.maxGap, "Maximum gap, in seconds, of missing frames to interpolate. Gaps larger than this will not interpolate but instead copy/paste the previous frame, resulting in a \"freeze\". Default is 0.5\n" );
@@ -102,6 +105,13 @@ int main( int argc, char *argv[] )
    app.add_option_function< std::vector< std::string > >( "files-or-directory", ParseFilesOrDirectory, "Input files or directory" )->excludes( streamOption );
 
    CLI11_PARSE( app, argc, argv );
+   
+   // If --version then ignore everything else, print the version, and exit
+   if ( args.printVersion )
+   {
+      std::cout << "kp2rig " << MY_VERSION << std::endl;
+      return 0;
+   }
    
    // We require at least a file/directory or the streaming option
    if ( args.inputFiles.size() == 0 &&
