@@ -11,7 +11,7 @@ endif()
 # Platform-specific stuff
 if (WIN32)
     set( IPP_PATH "C:/Program Files (x86)/IntelSWTools/compilers_and_libraries/windows/ipp" CACHE PATH "Path to Intel IPP")
-    set( IPP_LIB_SUBPATH "intel64_win"  CACHE STRING "Ipp library folder name under IPP_PATH")
+    set( IPP_LIB_SUBPATH "intel64_win" CACHE STRING "Ipp library folder name under IPP_PATH")
 elseif(APPLE)
     set( IPP_PATH "/opt/intel/ipp" CACHE PATH "Path to Intel IPP")
     set( IPP_LIB_SUBPATH "" )
@@ -23,8 +23,12 @@ endif()
 
 # Include IPP filtering?
 if ( EXISTS ${IPP_PATH} )
-   MESSAGE( "Found Intel Integrated Performance Primitives (${IPP_PATH})" )
+   MESSAGE( "Found Intel Integrated Performance Primitives (${IPP_PATH}). Smooth option \"lpf_ipp\" will be enabled" )
    target_compile_definitions( kp2rig PRIVATE HAVE_IPP )
+   SET( IPP_LIBRARIES ippcore ipps )
+else()
+   MESSAGE( "Could not find Intel Integrated Performance Primitives, smooth option \"lpf_ipp\" will be disabled" )
+   SET( IPP_LIBRARIES "" )
 endif()
 
 include_directories(
@@ -98,9 +102,6 @@ elseif(APPLE)
          
 endif()
 
-# Evaluates to nothing if specified utilities are not present or weren't asked for
-target_link_libraries( kp2rig ${APR_UTIL_LIBRARIES} ${GLIB2_LIBRARIES} )
-
 # I learned about generator expressions from here:
 #   https://foonathan.net/2018/10/cmake-warnings/
 target_compile_options( kp2rig
@@ -114,9 +115,13 @@ target_link_directories( kp2rig
       ${PROJECT_SOURCE_DIR}/../3rdparty/zfp/lib/${PLATFORM_STRING}
       ${IPP_PATH}/lib/${IPP_LIB_SUBPATH} )
 
+# Evaluates to nothing if specified utilities are not present or weren't asked for
+target_link_libraries( kp2rig
+   ${IPP_LIBRARIES}
+   ${APR_UTIL_LIBRARIES}
+   ${GLIB2_LIBRARIES} )
+
 target_link_libraries( kp2rig
    zfp
-   ippcore
-   ipps
    ${CMAKE_DL_LIBS}
    ${CMAKE_THREAD_LIBS_INIT} )
