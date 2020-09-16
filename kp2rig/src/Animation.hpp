@@ -18,7 +18,7 @@ public:
    double SegmentDuration() const { return _segmentDuration; }
    void SegmentDuration( double v ) { _segmentDuration = v; }
    void OutputDirectory( std::string v ) { _outputDirectory = v; }
-   void Smooth( Smooth::SMOOTH_TYPE v ) { _smoothType = v; }
+   void Smooth( SMOOTH_TYPE v ) { _smoothType = v; }
    void MaxMissingFrameGap( double v ) { _maxMissingFrameGap = v; }
    const std::vector< std::string > & SegmentFilenames() const;
    void FlushSegments();
@@ -47,7 +47,7 @@ private:
    std::string _outputDirectory;
    double _maxMissingFrameGap = 0.5;
    volatile bool _flush = false;
-   Smooth::SMOOTH_TYPE _smoothType = Smooth::SMOOTH_TYPE_NONE;
+   SMOOTH_TYPE _smoothType = SMOOTH_TYPE_NONE;
 };
 #endif /* Animation_hpp */
 

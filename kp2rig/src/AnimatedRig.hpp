@@ -25,7 +25,7 @@ public:
    // Many implementations have inherent delays, so expect time shifts!
    // Range is all inclusive, [rangeStart, rangeEnd].
    // Range is updated with shifted timestamps on successful return.
-   void SmoothFrames( Smooth::SMOOTH_TYPE type,
+   void SmoothFrames( SMOOTH_TYPE type,
       int & rangeStart,
       int & rangeEnd,
       bool flush = false );
@@ -35,11 +35,11 @@ public:
       int endTimestamp );
    
 private:
-   void SmoothAllKeypoints( Smooth::SMOOTH_TYPE type,
+   void SmoothAllKeypoints( SMOOTH_TYPE type,
       int & rangeStart,
       int & rangeEnd,
       bool flush = false );
-   void SmoothAllBoneRolls( Smooth::SMOOTH_TYPE type,
+   void SmoothAllBoneRolls( SMOOTH_TYPE type,
       int rangeStart,
       int rangeEnd,
       bool flush = false );
