@@ -1,3 +1,5 @@
+#ifdef HAVE_IPP
+
 #include <stdexcept>
 #include <algorithm>
 #include <limits.h>
@@ -213,3 +215,5 @@ int Smooth_lpfIpp::Apply( std::vector< double > & ref_smoothedSamples,
 
    return returnValue;
 }
+
+#endif
