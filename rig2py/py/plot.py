@@ -37,6 +37,7 @@ import os
 import numpy # pip3 install numpy
 import math
 import matplotlib.pyplot as plt # pip3 install matplotlib
+from mpl_toolkits import mplot3d # required for matplot versions older than 3.1.1
 
 def addPlot( poseData, ax ):
 
