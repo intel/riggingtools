@@ -111,11 +111,11 @@ def main():
    rig2py.frameCallback( onFrame )
 
    # Load all data from the file (will invoke the callback many times)
-   #try:
-   #   rig2py.read( args["inputJson"] )
-   #except RuntimeError as e:
-   #   print( e )
-   #   return
+   try:
+      rig2py.read( args["inputJson"] )
+   except RuntimeError as e:
+      print( e )
+      return
 
    # Plot all the txt files we created
    # TODO: use the frame number instead of assuming zero

@@ -5,8 +5,8 @@ Rigs store joints in a hierarchy as rotations relative to both their parent and 
 
 # Dependencies
  - python3 (3.5 or greater)
- - rig2py\[.so|.dll\](<riggingtools>/bin/<platform>/, usually built by cmake)
- - rig2pyHelper (<riggingtools>/rig2py/)
+ - rig2py\[.so|.dll\](\<riggingtools\>/bin/\<platform\>/, usually built by cmake)
+ - rig2pyHelper (<\riggingtools\>/rig2py/)
  - matplotlib (pip3 install matplotlib)
  - mathutils (pip3 install mathutils)
 
