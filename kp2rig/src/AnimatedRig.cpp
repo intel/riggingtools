@@ -187,14 +187,14 @@ void AnimatedRig::FixMissingFrames( int rangeStart,
       previousTimestamp = timestamp;
    }
 }
-void AnimatedRig::SmoothFrames( Smooth::SMOOTH_TYPE type,
+void AnimatedRig::SmoothFrames( SMOOTH_TYPE type,
    int & rangeStart,
    int & rangeEnd,
    bool flush )
 {
    // Don't need to do anything if smoothing is disabled
-   if ( type == Smooth::SMOOTH_TYPE_NONE ||
-      type == Smooth::SMOOTH_TYPE_UNKNOWN )
+   if ( type == SMOOTH_TYPE_NONE ||
+      type == SMOOTH_TYPE_UNKNOWN )
    {
       return;
    }
@@ -211,7 +211,7 @@ void AnimatedRig::SmoothFrames( Smooth::SMOOTH_TYPE type,
       rangeEnd,
       flush );
 }
-void AnimatedRig::SmoothAllKeypoints( Smooth::SMOOTH_TYPE type,
+void AnimatedRig::SmoothAllKeypoints( SMOOTH_TYPE type,
    int & rangeStart,
    int & rangeEnd,
    bool flush )
@@ -313,7 +313,7 @@ void AnimatedRig::SmoothAllKeypoints( Smooth::SMOOTH_TYPE type,
       _frames = std::move( filteredFrames );
    }
 }
-void AnimatedRig::SmoothAllBoneRolls( Smooth::SMOOTH_TYPE type,
+void AnimatedRig::SmoothAllBoneRolls( SMOOTH_TYPE type,
    int rangeStart,
    int rangeEnd,
    bool flush )

@@ -3,12 +3,12 @@ import sys
 import math
 
 restPose = {}
-oneFilename = ""
 
 def processCommandLine( argv ):
 
    flagsOptions = {
-      "-s": "modulePaths"
+      "-s": "modulePaths",
+      "-f": "frameNumber"
    }
    
    index = 1
@@ -20,7 +20,8 @@ def processCommandLine( argv ):
    # Get the command line parameters
    returnValue = {
       "inputJson": "",
-      "modulePaths" : ""
+      "modulePaths" : "",
+      "frameNumber" : 0
    }
    counter = 0
    while ( len( argv ) > counter ):
@@ -78,7 +79,6 @@ def onFrame( rigId,
    absolutePositions.pop()
    absolutePositions.append( '\n' )
 
-   global oneFilename
    oneFilename = rigId + ".txt"
 
    # It's a lot of data, so append to a CSV file.
@@ -117,8 +117,13 @@ def main():
       print( e )
       return
 
-   # Plot the first text file
-   plot.main( oneFilename )
-   
+   # Plot all the txt files we created
+   # TODO: use the frame number instead of assuming zero
+   files = []
+   for file in os.listdir("./"):
+      if file.endswith(".txt"):
+         files.append( file )
+   plot.main( files )
+
 if __name__ == "__main__":
    main()

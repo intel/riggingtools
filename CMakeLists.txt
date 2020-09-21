@@ -136,11 +136,13 @@ set( CMAKE_ARCHIVE_OUTPUT_DIRECTORY         ${BIN_DIR}$<0:> )
 
 # Every platform supports rig2c
 add_subdirectory( rig2c )
+install( TARGETS rig2c DESTINATION lib )
 
 # Only some platforms include server-side and python
 if ( (${PLATFORM_STRING} STREQUAL "linux") OR (${PLATFORM_STRING} STREQUAL "win64") OR (${PLATFORM_STRING} STREQUAL "macosx") )
 
    add_subdirectory( kp2rig )
+   install( TARGETS kp2rig DESTINATION bin )
 
    # Include python be default, or if '-DWITH_PYTHON=YES' is passed in
    if ( (NOT DEFINED WITH_PYTHON) OR
@@ -171,6 +173,10 @@ if(WIN32)
 endif()
 
 # Add the swift framework for iOS
-if ( APPLEs )
-   add_subdirectory( rig2swift )
+if ( APPLE )
+   if ( ${CMAKE_GENERATOR} STREQUAL "Xcode" )
+      add_subdirectory( rig2swift )
+   else()
+      MESSAGE( "\n INFO: rig2swift can only be built with the '-D Xcode' generator\n" )
+   endif()
 endif()

@@ -33,16 +33,16 @@ Example file:
 """
 
 import sys
+import os
 import numpy # pip3 install numpy
+import math
 import matplotlib.pyplot as plt # pip3 install matplotlib
+from mpl_toolkits import mplot3d # required for matplot versions older than 3.1.1
 
-def showPlot( poseData ):
+def addPlot( poseData, ax ):
 
    # Convert the CSV string to a float array
    xyzData = [float(numeric_string) for numeric_string in poseData.split( "," )]
-
-   # Create a new plot
-   ax = plt.axes(projection="3d")
 
    # Separate the components
    xPoints = xyzData[ 0::3 ]
@@ -61,22 +61,13 @@ def showPlot( poseData ):
    plot( [18,12,13,14],     ax, xPoints, yPoints, zPoints )
    plot( [18,15,16,17],     ax, xPoints, yPoints, zPoints )
 
-   # Various plot options
-   plt.axis('off')
-   ax.set_xlim([-1,1])
-   ax.set_ylim([-1,1])
-   ax.set_zlim([-1,1])
-
-   # Show the plot
-   plt.show()
-
 def plot( indices, ax, xPoints, yPoints, zPoints ):
 
    xPointsToPlot = []
    yPointsToPlot = []
    zPointsToPlot = []
    for i in indices:
-      ax.text( xPoints[i], yPoints[i], zPoints[i], str(i) )
+      #ax.text( xPoints[i], yPoints[i], zPoints[i], str(i) )
       xPointsToPlot.append( xPoints[i] )
       yPointsToPlot.append( yPoints[i] )
       zPointsToPlot.append( zPoints[i] )
@@ -86,22 +77,55 @@ def plot( indices, ax, xPoints, yPoints, zPoints ):
       zPointsToPlot,
       '-o' )
 
-def main( filename ):
+def main( filenames ):
    
-   # Read the first line
-   file = open( filename , 'r' )
-   line = file.readline().split( '\n' )[0]
-   file.close()
+   print( "Plotting the first frame for all characters" )
 
+   # Create and layout our subplots
+   numColumns=1
+   while math.pow(numColumns,2) < len(filenames):
+      numColumns = numColumns + 1
+
+   numRows = numColumns
+   if numColumns * (numRows - 1) >= len(filenames):
+      numRows = numRows - 1
+
+   fig = plt.figure()
+   plt.axis('off')
+
+   i = 1
+   for filename in filenames:
+
+      # Read the first line
+      file = open( filename , 'r' )
+      line = file.readline().split( '\n' )[0]
+      file.close()
+
+      # Create a new plot
+      ax = fig.add_subplot( numRows, numColumns, i, projection="3d" )
+
+      # Set limits
+      limit=0.5
+      ax.set_xlim([-limit,limit])
+      ax.set_ylim([-limit,limit])
+      ax.set_zlim([-limit,limit])
+      ax.axis('off')
+      ax.set_title( os.path.splitext(filename)[0] )
+
+      # Add the plot
+      addPlot( line, ax )
+      
+      i+=1
+   
    # Show the plot
-   showPlot( line )
+   plt.show()
    
 if __name__ == "__main__":
 
-    # Just read a single filename
+    # Assume all arguments are CSV files
    argv = sys.argv[1:]
    if len( argv ) < 1:
-      print( "Usage: <input_txt>" )
+      print( "Usage: <CSV files>" )
       exit( 0 )
 
-   main( argv[0] )
+   main( argv )
