@@ -52,7 +52,7 @@ If you don't need/want python support then add the following cmake argument:
  - `cd build`
  - `cmake -DCMAKE_BUILD_TYPE=Release ..`
    - `cmake -DCMAKE_BUILD_TYPE=Debug ..` for a debuggable build
-   - `cmake -G Xcode .. -DCMAKE_OSX_ARCHITECTURES=<arch>` for an Xcode project (<arch> is your target architecture, I.E x86_64, arm64, etc)
+   - `cmake -G Xcode .. -DCMAKE_OSX_ARCHITECTURES=<arch>` for an Xcode project (\<arch\> is your target architecture, I.E x86_64, arm64, etc)
  - `make`
 
 ## iOS
