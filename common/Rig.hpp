@@ -191,7 +191,8 @@ struct Rig
          return (*it).second;
    }
    // I intentionally made the return 'const char *' instead of 'std::string', because
-   // returning a static character array means it can be passed directly to a C function.
+   // returning a static character array means it can be passed directly to a C function,
+   // which is helpful for the C API
    static const char * GetJointType( JOINT_TYPE type )
    {
       switch ( type )

@@ -23,13 +23,22 @@ RigPose RigPose::Interpolate( const RigPose & rhs, double ratio ) const
 
    // Bone lengths are the same and already copied
 
-   // SLERP all bone rotations
+   // SLERP all bone rotations in the final rig
    for ( int i = 0; i < _rig.numJointsUsed; ++i )
    {
       Eigen::Quaterniond rotation1 = Utility::RawToQuaternion( this->_rig.GetJoint( Rig::JOINT_TYPE(i) ).quaternion );
       Eigen::Quaterniond rotation2 = Utility::RawToQuaternion( rhs._rig.GetJoint( Rig::JOINT_TYPE(i) ).quaternion );
       Eigen::Quaterniond interpolatedRotation = rotation1.slerp( ratio, rotation2 );
       returnValue.GetRig().GetJoint( Rig::JOINT_TYPE(i) ).quaternion = Utility::QuaternionToRaw( interpolatedRotation );
+   }
+
+   // SLERP all supplimentary joints
+   for ( size_t i = 0; i < _supplimentaryJoints.size(); ++i )
+   {
+      Eigen::Quaterniond rotation1 = Utility::RawToQuaternion( this->_supplimentaryJoints[i].second.quaternion );
+      Eigen::Quaterniond rotation2 = Utility::RawToQuaternion( rhs._supplimentaryJoints[i].second.quaternion );
+      Eigen::Quaterniond interpolatedRotation = rotation1.slerp( ratio, rotation2 );
+      returnValue._supplimentaryJoints[i].second.quaternion = Utility::QuaternionToRaw( interpolatedRotation );
    }
 
    // LERP all bone offsets

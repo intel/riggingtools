@@ -50,6 +50,8 @@ target_sources( kp2rig
       src/KpMpii_16.cpp
       src/KpMpii_20.hpp
       src/KpMpii_20.cpp
+      src/KpMpii_27.hpp
+      src/KpMpii_27.cpp
       src/KpMop_19.hpp
       src/KpMop_19.cpp
       src/KpSolidObject.hpp

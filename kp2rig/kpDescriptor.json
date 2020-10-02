@@ -47,6 +47,39 @@
          "rightHeel"
       ]
    },
+   "mpii_27": {
+      "description": "Same as MPII but with two additional keypoints for each foot",
+      "type": "humanoid",
+      "layout": [
+         "rightAnkle",
+         "rightKnee",
+         "rightHip",
+         "leftHip",
+         "leftKnee",
+         "leftAnkle",
+         "pelvis",
+         "baseNeck",
+         "baseHead",
+         "topHead",
+         "rightWrist",
+         "rightElbow",
+         "rightShoulder",
+         "leftShoulder",
+         "leftElbow",
+         "leftWrist",
+         "leftBigToe",
+         "leftSmallToe",
+         "leftHeel"
+         "rightBigToe",
+         "rightSmallToe",
+         "rightHeel",
+         "nose",
+         "leftEye",
+         "rightEye",
+         "leftEar",
+         "rightEar"
+      ]
+   },
    "coco": {
       "description": "http://cocodataset.org/#download. Keypoint layout defined in person_keypoints_val2017.json from 'Train/Val annotations' dataset",
       "type": "humanoid",
