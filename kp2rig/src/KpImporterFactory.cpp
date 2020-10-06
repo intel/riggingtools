@@ -9,7 +9,11 @@
 #include "KpJsonImporter.hpp"
 
 // Support old versions of nlohmann JSON parser
-typedef typename std::conditional< (NLOHMANN_JSON_VERSION_MAJOR < 3), typename std::invalid_argument, typename nlohmann::json::parse_error >::type jsonParseException_t;
+#if defined( NLOHMANN_JSON_VERSION_MAJOR )
+   typedef typename std::conditional< (NLOHMANN_JSON_VERSION_MAJOR < 3), typename std::invalid_argument, typename nlohmann::json::parse_error >::type jsonParseException_t;
+#else
+   typedef std::invalid_argument jsonParseException_t;
+#endif
 
 // Static JSON object loaded from kpDescriptor.json
 nlohmann::json g_kpDescriptor;
