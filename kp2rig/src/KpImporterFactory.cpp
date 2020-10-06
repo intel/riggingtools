@@ -8,6 +8,9 @@
 #include "KpCsvStreamImporter.hpp"
 #include "KpJsonImporter.hpp"
 
+// Support old versions of nlohmann JSON parser
+typedef typename std::conditional< (NLOHMANN_JSON_VERSION_MAJOR < 3), typename std::invalid_argument, typename nlohmann::json::parse_error >::type jsonParseException_t;
+
 // Static JSON object loaded from kpDescriptor.json
 nlohmann::json g_kpDescriptor;
 
@@ -61,8 +64,7 @@ std::map< KEYPOINT_TYPE, int > KpImporterFactory::GetKeypointMap( std::string kp
             {
                i >> g_kpDescriptor;
             }
-            // For version 3 catch ( nlohmann::json::parse_error e )
-            catch ( std::invalid_argument e )
+            catch ( jsonParseException_t e )
             {
                g_kpDescriptor = nullptr;
                std::stringstream ss;

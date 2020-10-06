@@ -507,3 +507,15 @@ void KpToRigHelper::HandleArms( Pose & pose )
    rig.rElbow.length = rElbowVector.norm();
    rig.lElbow.length = lElbowVector.norm();
 }
+Joint KpToRigHelper::CreateJoint( const Joint & parentJoint,
+   Eigen::Vector3d boneVector )
+{
+   Joint returnValue;
+   Eigen::Quaterniond parentRotationAbs = Utility::RawToQuaternion( parentJoint.quaternionAbs );
+   
+   Eigen::Quaterniond quat = Eigen::Quaterniond::FromTwoVectors( Eigen::Vector3d::UnitY(), parentRotationAbs.inverse()._transformVector( boneVector ) );
+   returnValue.length = boneVector.norm();
+   returnValue.quaternion = Utility::QuaternionToRaw( quat );
+   returnValue.quaternionAbs = Utility::QuaternionToRaw( parentRotationAbs * quat );
+   return returnValue;
+}

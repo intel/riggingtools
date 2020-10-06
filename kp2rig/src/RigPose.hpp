@@ -8,6 +8,17 @@
 #include <vector>
 #include "Rig.hpp"
 
+// Supplimentary joints are keypoints of importance not included in the final rig.
+struct SupplimentaryJoint : public Joint
+{
+   SupplimentaryJoint( std::string name,
+      std::string parentName,
+      const Joint & joint )
+      : Joint( joint ), name{ name }, parentName{ parentName } {}
+   std::string name;
+   std::string parentName;
+};
+
 // Wrapper for a rig, has extra information not contained in the rig
 class RigPose
 {
@@ -29,11 +40,10 @@ public:
    // @ratio is a value in the range [0,1], where @ratio == 0 is same as this, @ratio == 1 is same as rhs
    RigPose Interpolate( const RigPose & rhs, double ratio ) const;
    
-   // Supplimentary joints as {parent name, joint} pairs.
-   // These are keypoints of importance not included in the final rig.
+   // Supplimentary joints are keypoints of importance not included in the final rig.
    // If there is a hierarchy to the supplimentary joints, ensure they are added
    // in hierarchical order, with the parent coming first.
-   std::vector< std::pair< std::string, Joint > > _supplimentaryJoints;
+   std::vector< SupplimentaryJoint > SupplimentaryJoints;
    
 protected:
    void UpdateAbsRotations();

@@ -33,12 +33,12 @@ RigPose RigPose::Interpolate( const RigPose & rhs, double ratio ) const
    }
 
    // SLERP all supplimentary joints
-   for ( size_t i = 0; i < _supplimentaryJoints.size(); ++i )
+   for ( size_t i = 0; i < SupplimentaryJoints.size(); ++i )
    {
-      Eigen::Quaterniond rotation1 = Utility::RawToQuaternion( this->_supplimentaryJoints[i].second.quaternion );
-      Eigen::Quaterniond rotation2 = Utility::RawToQuaternion( rhs._supplimentaryJoints[i].second.quaternion );
+      Eigen::Quaterniond rotation1 = Utility::RawToQuaternion( this->SupplimentaryJoints[i].quaternion );
+      Eigen::Quaterniond rotation2 = Utility::RawToQuaternion( rhs.SupplimentaryJoints[i].quaternion );
       Eigen::Quaterniond interpolatedRotation = rotation1.slerp( ratio, rotation2 );
-      returnValue._supplimentaryJoints[i].second.quaternion = Utility::QuaternionToRaw( interpolatedRotation );
+      returnValue.SupplimentaryJoints[i].quaternion = Utility::QuaternionToRaw( interpolatedRotation );
    }
 
    // LERP all bone offsets
@@ -159,5 +159,16 @@ void RigPose::UpdateAbsRotations()
       // lWrist
       q = q * Utility::RawToQuaternion( _rig.lWrist.quaternion );
       _rig.lWrist.quaternionAbs = Utility::QuaternionToRaw( q );
+   }
+   
+   // SUPPLIMENTARY
+   for ( auto & joint : SupplimentaryJoints )
+   {
+      // Find the parent joint
+      // TODO: this assumes the parent is in the rig as a primary joint, not supplimentary
+      const Joint & parent = _rig.GetJoint( joint.parentName );
+      
+      // Update the absolute rotation
+      joint.quaternionAbs = Utility::QuaternionToRaw( Utility::RawToQuaternion( parent.quaternionAbs ) * Utility::RawToQuaternion( joint.quaternion ) );
    }
 }

@@ -7,13 +7,11 @@
 #include "KpToRigHelper.hpp"
 #include "RigToKpHelper.hpp"
 #include "KpHelper.hpp"
-#include "Utility.hpp"
 
 // Helper functions
 Eigen::Vector3d GetTipOfFoot( const Eigen::Vector3d & bigToe,
    const Eigen::Vector3d & smallToe,
    const Eigen::Vector3d & heel );
-void GetToes( const RigPose & rigPose );
    
 KpMpii_27::KpMpii_27( std::string kpType,
    const std::map< KEYPOINT_TYPE, int > & kpLayout )
@@ -55,26 +53,29 @@ RigPose & KpMpii_27::GenerateRig()
 void KpMpii_27::FromRigPose( const class RigPose & rigPose )
 {
    _rigPose = rigPose;
-   Rig & rig = _rigPose.GetRig();
    
    RigToKpHelper::HandleSpine( *this );
    RigToKpHelper::HandleLegs( *this );
    RigToKpHelper::HandleArms( *this );
    
-   GetToes( rigPose );
-   
-   // TODO: Use the heels from the supplimentary joints
-   Eigen::Vector3d parentLocation = Utility::RawToVector(_keypoints.leftAnkle);
-   double boneLength = rig.lAnkle.length / 2;
-   Eigen::Vector3d boneVector = Utility::RawToQuaternion( rig.lKnee.quaternionAbs )._transformVector( Eigen::Vector3d::UnitY() );
-   Eigen::Vector3d childLocation = parentLocation + (boneVector*boneLength);
-   _keypoints.leftHeel = Utility::VectorToRaw( childLocation );
-   
-   parentLocation = Utility::RawToVector(_keypoints.rightAnkle);
-   boneLength = rig.rAnkle.length / 2;
-   boneVector = Utility::RawToQuaternion( rig.rKnee.quaternionAbs )._transformVector( Eigen::Vector3d::UnitY() );
-   childLocation = parentLocation + (boneVector*boneLength);
-   _keypoints.rightHeel = Utility::VectorToRaw( childLocation );
+   // Handle supplimentary joints
+   for ( auto joint : rigPose.SupplimentaryJoints )
+   {
+      // Get the keypoint type
+      auto keypointType = StrToKpType( joint.parentName );
+      
+      // Get the parent location
+      // I'm using both the keypoint and the rig to avoid walking the entire hiearchy
+      const Joint & parentJoint = rigPose.GetRig().GetJoint( joint.parentName );
+      Eigen::Vector3d boneVector = Utility::RawToQuaternion( parentJoint.quaternionAbs )._transformVector( Eigen::Vector3d::UnitY() ) * parentJoint.length;
+      auto parentLocation = Utility::RawToVector( Keypoint( keypointType ) ) + boneVector;
+      
+      // Get the bone vector
+      boneVector = Utility::RawToQuaternion( joint.quaternionAbs )._transformVector( Eigen::Vector3d::UnitY() ) * joint.length;
+
+      // Add the keypoint
+      Keypoint( Utility::VectorToRaw( parentLocation + boneVector ), keypointType );
+   }
    
    _timestamp = rigPose.Timestamp();
    _rigCreated = true;
@@ -187,59 +188,13 @@ void KpMpii_27::HandleFeet()
    rig.lToeBase.quaternion = {0,0,0,1};
    rig.lToeBase.quaternionAbs = Utility::QuaternionToRaw( Utility::RawToQuaternion( rig.lAnkle.quaternionAbs ) * Utility::RawToQuaternion( restPose.lToeBase.quaternion ) );
    
-   // Right heel
-   Joint rHeelJoint;
-   Eigen::Vector3d rHeelVector = rHeel - rAnkle;
-   q1 = Eigen::Quaterniond::FromTwoVectors( Eigen::Vector3d::UnitY(), rKneeRotation.inverse()._transformVector( rHeelVector ) );
-   rHeelJoint.length = rHeelVector.norm();
-   rHeelJoint.quaternion = Utility::QuaternionToRaw( q1 );
-   rHeelJoint.quaternionAbs = Utility::QuaternionToRaw( rKneeRotation * q1 );
-   _rigPose._supplimentaryJoints.push_back( std::make_pair( "rightKnee", rHeelJoint ) );
-   
-   // Right big toe
-   Joint rBigToeJoint;
-   Eigen::Vector3d rBigToeVector = rBigToe - rAnkle;
-   q1 = Eigen::Quaterniond::FromTwoVectors( Eigen::Vector3d::UnitY(), rKneeRotation.inverse()._transformVector( rBigToeVector ) );
-   rBigToeJoint.length = rBigToeVector.norm();
-   rBigToeJoint.quaternion = Utility::QuaternionToRaw( q1 );
-   rBigToeJoint.quaternionAbs = Utility::QuaternionToRaw( rKneeRotation * q1 );
-   _rigPose._supplimentaryJoints.push_back( std::make_pair( "rightKnee", rBigToeJoint ) );
-   
-   // Right small toe
-   Joint rSmallToeJoint;
-   Eigen::Vector3d rSmallToeVector = rSmallToe - rAnkle;
-   q1 = Eigen::Quaterniond::FromTwoVectors( Eigen::Vector3d::UnitY(), rKneeRotation.inverse()._transformVector( rSmallToeVector ) );
-   rSmallToeJoint.length = rSmallToeVector.norm();
-   rSmallToeJoint.quaternion = Utility::QuaternionToRaw( q1 );
-   rSmallToeJoint.quaternionAbs = Utility::QuaternionToRaw( rKneeRotation * q1 );
-   _rigPose._supplimentaryJoints.push_back( std::make_pair( "rightKnee", rSmallToeJoint ) );
-   
-   // Left heel
-   Joint lHeelJoint;
-   Eigen::Vector3d lHeelVector = lHeel - lAnkle;
-   q1 = Eigen::Quaterniond::FromTwoVectors( Eigen::Vector3d::UnitY(), lKneeRotation.inverse()._transformVector( lHeelVector ) );
-   lHeelJoint.length = lHeelVector.norm();
-   lHeelJoint.quaternion = Utility::QuaternionToRaw( q1 );
-   lHeelJoint.quaternionAbs = Utility::QuaternionToRaw( lKneeRotation * q1);
-   _rigPose._supplimentaryJoints.push_back( std::make_pair( "leftKnee", rHeelJoint ) );
-   
-   // Left big toe
-   Joint lBigToeJoint;
-   Eigen::Vector3d lBigToeVector = lBigToe - lAnkle;
-   q1 = Eigen::Quaterniond::FromTwoVectors( Eigen::Vector3d::UnitY(), lKneeRotation.inverse()._transformVector( lBigToeVector ) );
-   lBigToeJoint.length = lBigToeVector.norm();
-   lBigToeJoint.quaternion = Utility::QuaternionToRaw( q1 );
-   lBigToeJoint.quaternionAbs = Utility::QuaternionToRaw( lKneeRotation * q1 );
-   _rigPose._supplimentaryJoints.push_back( std::make_pair( "leftKnee", lBigToeJoint ) );
-   
-   // Left small toe
-   Joint lSmallToeJoint;
-   Eigen::Vector3d lSmallToeVector = lSmallToe - lAnkle;
-   q1 = Eigen::Quaterniond::FromTwoVectors( Eigen::Vector3d::UnitY(), lKneeRotation.inverse()._transformVector( lSmallToeVector ) );
-   lSmallToeJoint.length = lSmallToeVector.norm();
-   lSmallToeJoint.quaternion = Utility::QuaternionToRaw( q1 );
-   lSmallToeJoint.quaternionAbs = Utility::QuaternionToRaw( lKneeRotation * q1 );
-   _rigPose._supplimentaryJoints.push_back( std::make_pair( "rightKnee", lSmallToeJoint ) );
+   // Heel, big toe, and small toe are supplimentary joints
+   _rigPose.SupplimentaryJoints.push_back( SupplimentaryJoint( "rightHeel",     "rightKnee", KpToRigHelper::CreateJoint( rig.rKnee, rHeel - rAnkle ) ) );
+   _rigPose.SupplimentaryJoints.push_back( SupplimentaryJoint( "rightBigToe",   "rightKnee", KpToRigHelper::CreateJoint( rig.rKnee, rBigToe - rAnkle ) ) );
+   _rigPose.SupplimentaryJoints.push_back( SupplimentaryJoint( "rightSmallToe", "rightKnee", KpToRigHelper::CreateJoint( rig.rKnee, rSmallToe - rAnkle ) ) );
+   _rigPose.SupplimentaryJoints.push_back( SupplimentaryJoint( "leftHeel",      "leftKnee",  KpToRigHelper::CreateJoint( rig.lKnee, lHeel - lAnkle ) ) );
+   _rigPose.SupplimentaryJoints.push_back( SupplimentaryJoint( "leftBigToe",    "leftKnee",  KpToRigHelper::CreateJoint( rig.lKnee, lBigToe - lAnkle ) ) );
+   _rigPose.SupplimentaryJoints.push_back( SupplimentaryJoint( "leftSmallToe",  "leftKnee",  KpToRigHelper::CreateJoint( rig.lKnee, lSmallToe - lAnkle ) ) );
 }
 Eigen::Vector3d GetTipOfFoot( const Eigen::Vector3d & bigToe,
    const Eigen::Vector3d & smallToe,
@@ -291,31 +246,4 @@ Eigen::Vector3d GetTipOfFoot( const Eigen::Vector3d & bigToe,
    
    // Return the tip of the foot
    return heel + hp1;
-}
-void GetToes( const RigPose & rigPose )
-{
-   (void)rigPose;
-   
-   //const Rig & restPose = Rig::RestPoseHumanoid();
-   //const double ankleToeRatio = restPose.rAnkle.length / (restPose.rAnkle.length + restPose.rToeBase.length);
-   
-   // left big toe
-//   Eigen::Vector3d parentLocation = Utility::RawToVector(_keypoints.leftAnkle);
-//   double boneLength = rig.lAnkle.length / ankleToeRatio;
-//   Eigen::Vector3d boneVector = Utility::RawToQuaternion( rig.lAnkle.quaternionAbs )._transformVector( Eigen::Vector3d::UnitY() );
-//   Eigen::Vector3d childLocation = parentLocation + (boneVector*boneLength);
-//   _keypoints.leftToe = Utility::VectorToRaw( childLocation );
-   
-//   // left small toe
-//   double boneLength = rig.lAnkle.length / ankleToeRatio;
-//   Eigen::Vector3d boneVector = Utility::RawToQuaternion( rig.lAnkle.quaternionAbs )._transformVector( Eigen::Vector3d::UnitY() );
-//   Eigen::Vector3d childLocation = parentLocation + (boneVector*boneLength);
-//   _keypoints.leftToe = Utility::VectorToRaw( childLocation );
-   
-   // right toe
-//   parentLocation = Utility::RawToVector(_keypoints.rightAnkle);
-//   boneLength = rig.rAnkle.length / ankleToeRatio;
-//   boneVector = Utility::RawToQuaternion( rig.rAnkle.quaternionAbs )._transformVector( Eigen::Vector3d::UnitY() );
-//   childLocation = parentLocation + (boneVector*boneLength);
-//   _keypoints.rightToe = Utility::VectorToRaw( childLocation );
 }

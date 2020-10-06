@@ -41,8 +41,8 @@
          "leftShoulder",
          "leftElbow",
          "leftWrist",
-         "leftToe",
-         "rightToe",
+         "leftFootTip",
+         "rightFootTip",
          "leftHeel",
          "rightHeel"
       ]
@@ -69,7 +69,7 @@
          "leftWrist",
          "leftBigToe",
          "leftSmallToe",
-         "leftHeel"
+         "leftHeel",
          "rightBigToe",
          "rightSmallToe",
          "rightHeel",
