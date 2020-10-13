@@ -95,6 +95,8 @@ bool KpMpii_27::ValidateRig() const
          return false;
       if ( !KpHelper::ValidateArms( *this ) )
          return false;
+      if ( !ValidateFeet() )
+         return false;
    }
    catch ( std::out_of_range & )
    {
@@ -154,8 +156,8 @@ void KpMpii_27::HandleFeet()
    Eigen::Vector3d lBigToe( _keypoints.leftBigToe[0], _keypoints.leftBigToe[1], _keypoints.leftBigToe[2] );
    Eigen::Vector3d lSmallToe( _keypoints.leftSmallToe[0], _keypoints.leftSmallToe[1], _keypoints.leftSmallToe[2] );
    Eigen::Vector3d lHeel( _keypoints.leftHeel[0], _keypoints.leftHeel[1], _keypoints.leftHeel[2] );
-   Eigen::Quaterniond rKneeRotation = Utility::RawToQuaternion( rig.rKnee.quaternionAbs );
-   Eigen::Quaterniond lKneeRotation = Utility::RawToQuaternion( rig.lKnee.quaternionAbs );
+   Eigen::Quaterniond rKneeRotationAbs = Utility::RawToQuaternion( rig.rKnee.quaternionAbs );
+   Eigen::Quaterniond lKneeRotationAbs = Utility::RawToQuaternion( rig.lKnee.quaternionAbs );
    
    // Create a point at the tip of the foot somewhere between the big and small toe.
    // Note the vector between big and small toe is not naturally perpendicular to center line along length of foot.
@@ -167,18 +169,61 @@ void KpMpii_27::HandleFeet()
    const double ankleToeRatio = restPose.rAnkle.length / (restPose.rAnkle.length + restPose.rToeBase.length);
    
    // Rest poses
-   Eigen::Quaterniond rAnkleRestPoseAdjustment = rKneeRotation * Utility::RawToQuaternion( restPose.rAnkle.quaternion );
-   Eigen::Quaterniond lAnkleRestPoseAdjustment = lKneeRotation * Utility::RawToQuaternion( restPose.lAnkle.quaternion );
+   Eigen::Quaterniond rAnkleRestPoseAdjustment = rKneeRotationAbs * Utility::RawToQuaternion( restPose.rAnkle.quaternion );
+   Eigen::Quaterniond lAnkleRestPoseAdjustment = lKneeRotationAbs * Utility::RawToQuaternion( restPose.lAnkle.quaternion );
    
-   // Ankle
+   // Ankle Rotations
+   Eigen::Quaterniond rAnkleRotation = Eigen::Quaterniond::FromTwoVectors( Eigen::Vector3d::UnitY(), rAnkleRestPoseAdjustment.inverse()._transformVector( rAnkleToToe.normalized() ) );
+   Eigen::Quaterniond lAnkleRotation = Eigen::Quaterniond::FromTwoVectors( Eigen::Vector3d::UnitY(), lAnkleRestPoseAdjustment.inverse()._transformVector( lAnkleToToe.normalized() ) );
+   
+   // Ankle roll
+   // We don't have enough information to know the difference between toe roll and ankle roll,
+   // so the same roll will be applied to both; this is good enough when stiff shoes are worn, but not ideal
+   // when soft shoes are worn or bare foot.
+   //   1 calculate the toes unit vector (small toe to big toe)
+   //   2 adjust this toes vector so that it's perpendcular to the ankle vector
+   //   3 apply the inverse ankle rotation to get the toes vector perpendicular to the up vector.
+   //     The toes vector now lies along the xz plane
+   //   4 determine the difference between the x vector (one positive, one negative) and the toes vector.
+   //     Final rotation should be small unless an injury occurs!
+//printf( "%.3f,%.3f,%.3f\n", rAnkleToToe.normalized().x(), rAnkleToToe.normalized().y(), rAnkleToToe.normalized().z() );
+   // 1
+   Eigen::Vector3d rToesVector = (rBigToe - rSmallToe).normalized();
+   Eigen::Vector3d lToesVector = (lBigToe - lSmallToe).normalized();
+//printf( "%.3f,%.3f,%.3f\n", rToesVector.x(), rToesVector.y(), rToesVector.z() );
+   
+   // 2
+   //rToesVector = rAnkleToToe.normalized().cross( rToesVector ).normalized().cross( rAnkleToToe.normalized() ).normalized();
+   //rToesVector = rAnkleToToe.normalized().cross( rToesVector ).normalized();
+   rToesVector = rToesVector.cross( rAnkleToToe.normalized() ).normalized();
+   //rToesVector = rAnkleToToe.normalized().cross( rToesVector ).normalized();
+   //lToesVector = lAnkleToToe.normalized().cross( lToesVector ).normalized().cross( lAnkleToToe.normalized() ).normalized();
+   lToesVector = lToesVector.cross( lAnkleToToe.normalized() ).normalized();
+//printf( "%.3f,%.3f,%.3f\n", rToesVector.x(), rToesVector.y(), rToesVector.z() );
+   
+   // 3
+   rToesVector = (rAnkleRestPoseAdjustment * rAnkleRotation).inverse()._transformVector( rToesVector );
+   lToesVector = (lAnkleRestPoseAdjustment * lAnkleRotation).inverse()._transformVector( lToesVector );
+//printf( "%.3f,%.3f,%.3f\n", rToesVector.x(), rToesVector.y(), rToesVector.z() );
+//printf( "%.3f,%.3f,%.3f\n", lToesVector.x(), lToesVector.y(), lToesVector.z() );
+//Eigen::Vector3d ankleUpVec = (rAnkleRestPoseAdjustment * rAnkleRotation)._transformVector( Eigen::Vector3d::UnitZ() );
+//(void)ankleUpVec;
+   
+   // 4
+   Eigen::Quaterniond rAnkleRoll = {1,0,0,0}, lAnkleRoll = {1,0,0,0};
+   //Eigen::Quaterniond rAnkleRoll = Eigen::Quaterniond::FromTwoVectors( -Eigen::Vector3d::UnitZ(), rToesVector );
+   //Eigen::Quaterniond lAnkleRoll = Eigen::Quaterniond::FromTwoVectors( Eigen::Vector3d::UnitZ(), lToesVector );
+   
+//Eigen::AngleAxisd lToesRollAngle( rAnkleRoll );
+//printf( "%.3f\n", lToesRollAngle.angle() * lToesRollAngle.axis()[1] );
+
+   // Finish the ankles
    rig.rAnkle.length = rAnkleToToe.norm() * ankleToeRatio;
-   Eigen::Quaterniond q1 = Eigen::Quaterniond::FromTwoVectors( Eigen::Vector3d::UnitY(), rAnkleRestPoseAdjustment.inverse()._transformVector( rAnkleToToe ) );
-   rig.rAnkle.quaternion = Utility::QuaternionToRaw( q1 );
-   rig.rAnkle.quaternionAbs = Utility::QuaternionToRaw( rAnkleRestPoseAdjustment * q1 );
+   rig.rAnkle.quaternion = Utility::QuaternionToRaw( rAnkleRotation * rAnkleRoll );
+   rig.rAnkle.quaternionAbs = Utility::QuaternionToRaw( rAnkleRestPoseAdjustment * (rAnkleRotation * rAnkleRoll) );
    rig.lAnkle.length = lAnkleToToe.norm() * ankleToeRatio;
-   q1 = Eigen::Quaterniond::FromTwoVectors( Eigen::Vector3d::UnitY(), lAnkleRestPoseAdjustment.inverse()._transformVector( lAnkleToToe ) );
-   rig.lAnkle.quaternion = Utility::QuaternionToRaw( q1 );
-   rig.lAnkle.quaternionAbs = Utility::QuaternionToRaw( lAnkleRestPoseAdjustment * q1 );
+   rig.lAnkle.quaternion = Utility::QuaternionToRaw( lAnkleRotation * lAnkleRoll );
+   rig.lAnkle.quaternionAbs = Utility::QuaternionToRaw( lAnkleRestPoseAdjustment * (lAnkleRotation * lAnkleRoll) );
    
    // Toe base (ball of foot)
    rig.rToeBase.length = rAnkleToToe.norm() * (1-ankleToeRatio);
@@ -246,4 +291,34 @@ Eigen::Vector3d GetTipOfFoot( const Eigen::Vector3d & bigToe,
    
    // Return the tip of the foot
    return heel + hp1;
+}
+bool KpMpii_27::ValidateFeet() const
+{
+   return false;
+//   Eigen::Quaterniond parentLocation = spine4Quaternion * Eigen::AngleAxisd( M_PI / 2, forwardVector );
+//
+//   // rShoulder
+//   Eigen::Vector3d parentLocation = torsoLocation;
+//   boneVector = Utility::RawToVector( rig.rShoulder.offset );
+//   Eigen::Vector3d childLocation = parentLocation + boneVector;
+//   Eigen::Vector3d kprShoulder = Utility::RawToVector( pose.Keypoint( RIGHT_SHOULDER ) );
+//   distance = (childLocation - kprShoulder).norm();
+//   if ( distance > tolerance )
+//      return false;
+//   parentLocation = childLocation;
+//
+//   // rElbow
+//   q = rShoulderAdjustmentRotatation * Utility::RawToQuaternion( rig.rShoulder.quaternion );
+//   double boneLength = rig.rShoulder.length;
+//   boneVector = q._transformVector( Eigen::Vector3d::UnitY() );
+//   childLocation = parentLocation + (boneVector*boneLength);
+//   Eigen::Vector3d kprElbow = Utility::RawToVector( pose.Keypoint( RIGHT_ELBOW ) );
+//   distance = (childLocation - kprElbow).norm();
+//   if ( distance > tolerance )
+//      return false;
+//   if ( !q.isApprox( Utility::RawToQuaternion( rig.rShoulder.quaternionAbs ) ) )
+//      return false;
+//   parentLocation = childLocation;
+//
+//   return true;
 }

@@ -160,11 +160,11 @@ void KpToRigHelper::HandleSpine( Pose & pose )
    
    // 6
    q1 = q1 * pelvisRoll;
-   rig.spine1.quaternion = Utility::QuaternionToRaw( q1 );
-   rig.spine1.quaternionAbs = rig.spine1.quaternion;
+   rig.pelvis.quaternion = Utility::QuaternionToRaw( q1 );
+   rig.pelvis.quaternionAbs = rig.pelvis.quaternion;
    
    // 7
-   rig.spine1.length = (interpolatedSpinePoints[0] - pelvis).norm();
+   rig.pelvis.length = (interpolatedSpinePoints[0] - pelvis).norm();
    
    
    // All subsequent rotations must be RELATIVE, so we need to invert the cumulative quaternion before

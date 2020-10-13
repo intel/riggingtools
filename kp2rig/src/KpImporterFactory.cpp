@@ -1,5 +1,6 @@
 #include <sstream>
 #include <fstream>
+#include <json.hpp>
 #include "Utility.hpp"
 #include "KpImporterFactory.hpp"
 

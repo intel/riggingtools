@@ -26,14 +26,15 @@ void AnimatedRig::AddPose( std::unique_ptr< Pose > & pose )
 }
 void AnimatedRig::DetermineBoneLengths( std::map< int, std::unique_ptr< Pose > >::iterator & poseIt )
 {
-   // Store the first MIN_NUM_BONES bone lengths
-   const int MIN_NUM_BONES = 5;
-   if ( _rawBoneLengths[ 0 ].size() < MIN_NUM_BONES )
+   // For the first MIN_NUM_FRAMES
+   constexpr int MIN_NUM_FRAMES = 5;
+   if ( _rawBoneLengths[ 0 ].size() < MIN_NUM_FRAMES )
    {
       // Generate a RigPose only so we can determine bone lengths
       (*poseIt).second->GenerateRig();
       
-      // Ensure the rig is good-to-go
+      // Ensure the rig is good-to-go.
+      // Note this will only validate the first MIN_NUM_FRAMES for this rig IF successfull
       if ( !(*poseIt).second->ValidateRig() )
       {
          std::stringstream ss;
@@ -64,7 +65,7 @@ void AnimatedRig::DetermineBoneLengths( std::map< int, std::unique_ptr< Pose > >
    if ( _averagedBoneLengths.size() == 0 )
    {
       // If we have enough data to calculate our average bone lengths
-      if (  _rawBoneLengths[ 0 ].size() == MIN_NUM_BONES )
+      if (  _rawBoneLengths[ 0 ].size() == MIN_NUM_FRAMES )
       {
          // For every bone
          for ( auto rawBoneLength : _rawBoneLengths )

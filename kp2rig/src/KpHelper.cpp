@@ -11,7 +11,7 @@ bool KpHelper::ValidateSpine( const Pose & pose )
    double distance;
    const Rig & rig = pose.RigPose().GetRig();
    Eigen::Vector3d rigPelvis = Utility::RawToVector( rig.location );
-   Eigen::Quaterniond pelvisQuaternion = Utility::RawToQuaternion( rig.spine1.quaternion );
+   Eigen::Quaterniond pelvisQuaternion = Utility::RawToQuaternion( rig.pelvis.quaternion );
    Eigen::Quaterniond q;
    Eigen::Vector3d boneVector;
 
@@ -19,9 +19,9 @@ bool KpHelper::ValidateSpine( const Pose & pose )
 
    // spine2 location (nothing to compare against, but we need to calculate it)
    boneVector = pelvisQuaternion._transformVector( Eigen::Vector3d::UnitY() );
-   boneVector *= rig.spine1.length;
+   boneVector *= rig.pelvis.length;
    Eigen::Vector3d spine2Head = rigPelvis + boneVector;
-   if ( !pelvisQuaternion.isApprox( Utility::RawToQuaternion( rig.spine1.quaternionAbs ) ) )
+   if ( !pelvisQuaternion.isApprox( Utility::RawToQuaternion( rig.pelvis.quaternionAbs ) ) )
       return false;
 
    // spine3 location (nothing to compare against, but we need to calculate it)
@@ -83,12 +83,12 @@ bool KpHelper::ValidateSpine( const Pose & pose )
 }
 bool KpHelper::ValidateLegs( const Pose & pose )
 {
-   const double tolerance = 0.25;
+   constexpr double tolerance = 0.25;
    double distance;
    const Rig & rig = pose.RigPose().GetRig();
    Eigen::Vector3d forwardVector( 0, 0, 1 );
    Eigen::Vector3d rigPelvis = Utility::RawToVector( rig.location );
-   Eigen::Quaterniond pelvisQuaternion = Utility::RawToQuaternion( rig.spine1.quaternion );
+   Eigen::Quaterniond pelvisQuaternion = Utility::RawToQuaternion( rig.pelvis.quaternion );
    Eigen::Quaterniond hipAdjustmentRotation( Eigen::AngleAxisd( M_PI, forwardVector ) );
    Eigen::Quaterniond q;
    Eigen::Vector3d boneVector;
@@ -157,12 +157,12 @@ bool KpHelper::ValidateArms( const Pose & pose )
    Eigen::Vector3d forwardVector( 0, 0, 1 );
 
    Eigen::Vector3d torsoLocation = Utility::RawToVector( rig.location );
-   Eigen::Quaterniond q = Utility::RawToQuaternion( rig.spine1.quaternion );
+   Eigen::Quaterniond q = Utility::RawToQuaternion( rig.pelvis.quaternion );
    Eigen::Vector3d boneVector;
    
    // Walk from the pelvis up to the tip of spine4 to get the location of the torso
    boneVector = q._transformVector( Eigen::Vector3d::UnitY() );
-   boneVector *= rig.spine1.length;
+   boneVector *= rig.pelvis.length;
    torsoLocation += boneVector;
    
    q = q * Utility::RawToQuaternion( rig.spine2.quaternion );

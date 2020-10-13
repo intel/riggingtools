@@ -68,6 +68,7 @@ public:
 protected:
    virtual void HandleHands();
    virtual void HandleFeet();
+   virtual bool ValidateFeet() const;
    
 private:
    Mpii_27 _keypoints;

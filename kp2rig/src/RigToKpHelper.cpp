@@ -1,3 +1,4 @@
+#include <vector>
 #include "RigToKpHelper.hpp"
 #include "Pose.hpp"
 #include "RigPose.hpp"
@@ -139,4 +140,47 @@ void RigToKpHelper::HandleArms( Pose & pose )
    boneVector = Utility::RawToQuaternion( rig.rElbow.quaternionAbs )._transformVector( Eigen::Vector3d::UnitY() );
    childLocation = parentLocation + (boneVector*boneLength);
    pose.Keypoint( Utility::VectorToRaw( childLocation ), RIGHT_WRIST );
+}
+std::array< double, 3 > RigToKpHelper::WorldCoordinates( const Rig & rig,
+   Rig::JOINT_TYPE type )
+{
+   // Get the rest pose
+   const Rig restPose = Rig::DefaultPoseHumanoid();
+   
+   // Get the root location
+   Eigen::Vector3d location = Utility::RawToVector( rig.location );
+   
+   // Reverse back to the root, keeping track of the hierarchy
+   std::vector< std::pair< Rig::JOINT_TYPE, bool > > hierarchy;
+   std::pair< Rig::JOINT_TYPE, bool > parent = { type, false };
+   while ( parent.first != Rig::JOINT_TYPE_UNKNOWN)
+   {
+      hierarchy.push_back( parent );
+      parent = Rig::GetJointParent( parent.first );
+   }
+   
+   // Walk the hierarchy from the root to the destination
+   Eigen::Quaterniond cumulativeRotation = {1, 0, 0, 0};
+   for ( auto reverseIt = hierarchy.rbegin(); reverseIt != hierarchy.rend(); ++reverseIt )
+   {
+      const auto & joint = rig.GetJoint( (*reverseIt).first );
+      
+      // Handle the offset
+      //Eigen::Vector3d offset = Utility::RawToVector( joint.offset );
+      //offset = cumulativeRotation._transformVector( offset );
+      //location += offset;
+      location += Utility::RawToVector( joint.offset );
+      
+      // Update the rotation
+      cumulativeRotation = cumulativeRotation * (Utility::RawToQuaternion( restPose.GetJoint( (*reverseIt).first ).quaternion ) * Utility::RawToQuaternion( joint.quaternion ));
+    
+      // If we need to move to the end of the bone
+      if ( (*reverseIt).second )
+      {
+         // Update the location
+         location += cumulativeRotation._transformVector( Eigen::Vector3d::UnitY() ) * joint.length;
+      }
+   }
+   
+   return Utility::VectorToRaw( location );
 }

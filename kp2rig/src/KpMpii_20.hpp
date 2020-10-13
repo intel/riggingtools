@@ -25,8 +25,8 @@ struct Mpii_20
    std::array< double, 3 > leftShoulder;
    std::array< double, 3 > leftElbow;
    std::array< double, 3 > leftWrist;
-   std::array< double, 3 > leftToe;
-   std::array< double, 3 > rightToe;
+   std::array< double, 3 > leftFootTip;
+   std::array< double, 3 > rightFootTip;
    std::array< double, 3 > leftHeel;
    std::array< double, 3 > rightHeel;
 };
@@ -60,6 +60,7 @@ public:
 protected:
    virtual void HandleHands();
    virtual void HandleFeet();
+   virtual bool ValidateFeet() const;
    
 private:
    Mpii_20 _keypoints;
