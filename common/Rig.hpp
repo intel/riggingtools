@@ -3,6 +3,7 @@
 
 #include <array>
 #include <unordered_map>
+#include <vector>
 #include <mutex>
 
 // Global strings
@@ -49,10 +50,9 @@ struct Joint
    
    // Some joints, such as hips and shoulders, have offsets from their parents. This isn't
    // anatomically correct (particularly for the shoulders which have a clavicle bone) but
-   // is what we have for now, and reverse kinematics between shoulder and torso should fairly
-   // straight-forward if needed later on.
+   // this is what we have for now.
    // This is to be interpreted as an absolute offset relative to the parent, with
-   // all parent rotations already accounted for so don't rotate by the parent's rotation.
+   // all parent rotations already accounted for (so don't apply the parent's rotation to these offsets).
    std::array< double, 3 > offset = { 0 };
 };
 

@@ -5,16 +5,18 @@
 #include <stdlib.h>
 #include <memory>
 #include <string>
-#include <vector>
+#include <map>
 #include "Rig.hpp"
 
 // Supplimentary joints are keypoints of importance not included in the final rig.
 struct SupplimentaryJoint : public Joint
 {
+   SupplimentaryJoint() = default;
    SupplimentaryJoint( std::string name,
       std::string parentName,
       const Joint & joint )
       : Joint( joint ), name{ name }, parentName{ parentName } {}
+   SupplimentaryJoint( const SupplimentaryJoint & ) = default;
    std::string name;
    std::string parentName;
 };
@@ -41,9 +43,7 @@ public:
    RigPose Interpolate( const RigPose & rhs, double ratio ) const;
    
    // Supplimentary joints are keypoints of importance not included in the final rig.
-   // If there is a hierarchy to the supplimentary joints, ensure they are added
-   // in hierarchical order, with the parent coming first.
-   std::vector< SupplimentaryJoint > SupplimentaryJoints;
+   std::map< std::string, SupplimentaryJoint > SupplimentaryJoints;
    
 protected:
    void UpdateAbsRotations();
