@@ -183,42 +183,31 @@ void KpMpii_27::HandleFeet()
    // We don't have enough information to know the difference between toe roll and ankle roll,
    // so the same roll will be applied to both; this is good enough when stiff shoes are worn, but not ideal
    // when soft shoes are worn or bare foot.
-   //   1 calculate the toes unit vector (small toe to big toe)
+   //   1 calculate the toes unit vector, where the direction of the vector depends on the foot
    //   2 adjust this toes vector so that it's perpendcular to the ankle vector
    //   3 apply the inverse ankle rotation to get the toes vector perpendicular to the up vector.
    //     The toes vector now lies along the xz plane
    //   4 determine the difference between the x vector (one positive, one negative) and the toes vector.
    //     Final rotation should be small unless an injury occurs!
-//printf( "%.3f,%.3f,%.3f\n", rAnkleToToe.normalized().x(), rAnkleToToe.normalized().y(), rAnkleToToe.normalized().z() );
+
    // 1
    Eigen::Vector3d rToesVector = (rBigToe - rSmallToe).normalized();
-   Eigen::Vector3d lToesVector = (lBigToe - lSmallToe).normalized();
-//printf( "%.3f,%.3f,%.3f\n", rToesVector.x(), rToesVector.y(), rToesVector.z() );
+   Eigen::Vector3d lToesVector = (lSmallToe - lBigToe).normalized();
    
    // 2
-   //rToesVector = rAnkleToToe.normalized().cross( rToesVector ).normalized().cross( rAnkleToToe.normalized() ).normalized();
-   //rToesVector = rAnkleToToe.normalized().cross( rToesVector ).normalized();
    rToesVector = rToesVector.cross( rAnkleToToe.normalized() ).normalized();
-   //rToesVector = rAnkleToToe.normalized().cross( rToesVector ).normalized();
-   //lToesVector = lAnkleToToe.normalized().cross( lToesVector ).normalized().cross( lAnkleToToe.normalized() ).normalized();
-   lToesVector = lToesVector.cross( lAnkleToToe.normalized() ).normalized();
-//printf( "%.3f,%.3f,%.3f\n", rToesVector.x(), rToesVector.y(), rToesVector.z() );
+   lToesVector = lAnkleToToe.cross( lToesVector.normalized() ).normalized();
    
    // 3
    rToesVector = (rAnkleRestPoseAdjustment * rAnkleRotation).inverse()._transformVector( rToesVector );
    lToesVector = (lAnkleRestPoseAdjustment * lAnkleRotation).inverse()._transformVector( lToesVector );
-//printf( "%.3f,%.3f,%.3f\n", rToesVector.x(), rToesVector.y(), rToesVector.z() );
-//printf( "%.3f,%.3f,%.3f\n", lToesVector.x(), lToesVector.y(), lToesVector.z() );
-//Eigen::Vector3d ankleUpVec = (rAnkleRestPoseAdjustment * rAnkleRotation)._transformVector( Eigen::Vector3d::UnitZ() );
-//(void)ankleUpVec;
    
    // 4
-   Eigen::Quaterniond rAnkleRoll = {1,0,0,0}, lAnkleRoll = {1,0,0,0};
+   // TODO: ROLL IS DISABLED: Swap commented sections once input toes vectors are more reliable.
+   Eigen::Quaterniond rAnkleRoll = {1,0,0,0};
+   Eigen::Quaterniond lAnkleRoll = {1,0,0,0};
    //Eigen::Quaterniond rAnkleRoll = Eigen::Quaterniond::FromTwoVectors( -Eigen::Vector3d::UnitZ(), rToesVector );
    //Eigen::Quaterniond lAnkleRoll = Eigen::Quaterniond::FromTwoVectors( Eigen::Vector3d::UnitZ(), lToesVector );
-   
-//Eigen::AngleAxisd lToesRollAngle( rAnkleRoll );
-//printf( "%.3f\n", lToesRollAngle.angle() * lToesRollAngle.axis()[1] );
 
    // Finish the ankles
    rig.rAnkle.length = rAnkleToToe.norm() * ankleToeRatio;
