@@ -11,6 +11,7 @@
 // Built-in pose types
 #include "KpMpii_16.hpp"
 #include "KpMpii_20.hpp"
+#include "KpMpii_27.hpp"
 #include "KpMop_19.hpp"
 #include "KpSolidObject.hpp"
 
@@ -19,6 +20,7 @@ static std::unordered_map< std::string, std::function< Pose *(std::string kpType
 {
    { "mpii",        [](std::string kpType, const std::map< KEYPOINT_TYPE, int > & kpLayout) { return new KpMpii_16( kpType, kpLayout ); } },
    { "mpii_20",     [](std::string kpType, const std::map< KEYPOINT_TYPE, int > & kpLayout) { return new KpMpii_20( kpType, kpLayout ); } },
+   { "mpii_27",     [](std::string kpType, const std::map< KEYPOINT_TYPE, int > & kpLayout) { return new KpMpii_27( kpType, kpLayout ); } },
    { "mop_19",      [](std::string kpType, const std::map< KEYPOINT_TYPE, int > & kpLayout) { return new KpMop_19( kpType, kpLayout ); } },
    { "solidObject", [](std::string kpType, const std::map< KEYPOINT_TYPE, int > & kpLayout) { return new KpSolidObject( kpType, kpLayout ); } }
 };

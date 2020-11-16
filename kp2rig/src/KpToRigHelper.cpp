@@ -160,11 +160,11 @@ void KpToRigHelper::HandleSpine( Pose & pose )
    
    // 6
    q1 = q1 * pelvisRoll;
-   rig.spine1.quaternion = Utility::QuaternionToRaw( q1 );
-   rig.spine1.quaternionAbs = rig.spine1.quaternion;
+   rig.pelvis.quaternion = Utility::QuaternionToRaw( q1 );
+   rig.pelvis.quaternionAbs = rig.pelvis.quaternion;
    
    // 7
-   rig.spine1.length = (interpolatedSpinePoints[0] - pelvis).norm();
+   rig.pelvis.length = (interpolatedSpinePoints[0] - pelvis).norm();
    
    
    // All subsequent rotations must be RELATIVE, so we need to invert the cumulative quaternion before
@@ -506,4 +506,16 @@ void KpToRigHelper::HandleArms( Pose & pose )
    rig.lElbow.quaternionAbs = Utility::QuaternionToRaw( (lRestPoseAdjustmentRotatation * lShoulderRotation) * lElbowRotation );
    rig.rElbow.length = rElbowVector.norm();
    rig.lElbow.length = lElbowVector.norm();
+}
+Joint KpToRigHelper::CreateJoint( const Joint & parentJoint,
+   Eigen::Vector3d boneVector )
+{
+   Joint returnValue;
+   Eigen::Quaterniond parentRotationAbs = Utility::RawToQuaternion( parentJoint.quaternionAbs );
+   
+   Eigen::Quaterniond quat = Eigen::Quaterniond::FromTwoVectors( Eigen::Vector3d::UnitY(), parentRotationAbs.inverse()._transformVector( boneVector ) );
+   returnValue.length = boneVector.norm();
+   returnValue.quaternion = Utility::QuaternionToRaw( quat );
+   returnValue.quaternionAbs = Utility::QuaternionToRaw( parentRotationAbs * quat );
+   return returnValue;
 }

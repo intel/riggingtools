@@ -28,8 +28,10 @@ If you don't need/want python support then add the following cmake argument:
  - `cd riggingTools`
 
 ### Build all projects
- - `cmake -DCMAKE_BUILD_TYPE=Release .`
-   - `cmake -DCMAKE_BUILD_TYPE=Debug .` for a debuggable build
+ - `mkdir build`
+ - `cd build`
+ -`cmake -DCMAKE_BUILD_TYPE=Release ..`
+   - `cmake -DCMAKE_BUILD_TYPE=Debug ..` for a debuggable build
  - `make`
 
 ## macOS
@@ -46,9 +48,11 @@ If you don't need/want python support then add the following cmake argument:
  - `cd riggingTools`
 
 ### Build all projects
- - `cmake -DCMAKE_BUILD_TYPE=Release .`
-   - `cmake -DCMAKE_BUILD_TYPE=Debug .` for a debuggable build
-   - `cmake -G Xcode .` for an IDE project (Xcode)
+ - `mkdir build`
+ - `cd build`
+ - `cmake -DCMAKE_BUILD_TYPE=Release ..`
+   - `cmake -DCMAKE_BUILD_TYPE=Debug ..` for a debuggable build
+   - `cmake -G Xcode .. -DCMAKE_OSX_ARCHITECTURES=<arch>` for an Xcode project (\<arch\> is your target architecture, I.E x86_64, arm64, etc)
  - `make`
 
 ## iOS
@@ -65,7 +69,9 @@ iOS only supports client-side utilities and not python.
  - `cd riggingTools`
 
 ### Build all projects
- - `cmake . -G Xcode -DCMAKE_SYSTEM_NAME=iOS`
+ - `mkdir build`
+ - `cd build`
+ - `cmake .. -G Xcode -DCMAKE_SYSTEM_NAME=iOS`
  - Open the created project in Xcode
  - Select a Development Team for the target 'testIos': ![Set the Development Team](/img/testIos_devTeam.png)
  - Change the target device from 'My Mac' to the device/simulator you are building for (this won't build for macOS): ![Set the Target Device](/img/testIos_setDevice.png)
@@ -87,8 +93,10 @@ Android only supports client-side utilities and not python.
  - `cd riggingTools`
 
 ### Build all projects
- - `cmake . -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=<ndk_path>/build/cmake/android.toolchain.cmake -DANDROID_PLATFORM=25`
-   - `cmake . -DCMAKE_BUILD_TYPE=Debug -DCMAKE_TOOLCHAIN_FILE=<ndk_path>/build/cmake/android.toolchain.cmake -DANDROID_PLATFORM=25` for a debuggable build
+ - `mkdir build`
+ - `cd build`
+ - `cmake .. -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=<ndk_path>/build/cmake/android.toolchain.cmake -DANDROID_PLATFORM=25`
+   - `cmake .. -DCMAKE_BUILD_TYPE=Debug -DCMAKE_TOOLCHAIN_FILE=<ndk_path>/build/cmake/android.toolchain.cmake -DANDROID_PLATFORM=25` for a debuggable build
  - `make`
 
 ## Windows
@@ -107,8 +115,10 @@ Android only supports client-side utilities and not python.
 ### Build all projects
  - Open a Visual Studio Command Prompt. This is important because a normal command prompt will NOT have the environment set correctly.
    - This can be opened by starting Visual Studio and navigating the menu: Tools->Visual Studio Command Prompt
- - `cmake .`
-   - For a UWP build: `cmake -DCMAKE_SYSTEM_NAME=WindowsStore -DCMAKE_SYSTEM_VERSION='10.0' .`
+ - `mkdir build`
+ - `cd build`
+ - `cmake ..`
+   - For a UWP build: `cmake -DCMAKE_SYSTEM_NAME=WindowsStore -DCMAKE_SYSTEM_VERSION='10.0' ..`
  - `devenv riggingTools.sln /Build Release`
    - For a debug build: `devenv riggingTools.sln /Build Debug`
 

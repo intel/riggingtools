@@ -187,7 +187,7 @@ API_TYPE_NAME( RETURN_CODE ) API_CALLING_CONVENTION API_FUNC_NAME( getRestPoseHu
    joint->name = Rig::GetJointType( jointType );
    
    // Fill the parent name
-   joint->parentName = Rig::GetJointType( Rig::GetJointParent( jointType ) );
+   joint->parentName = Rig::GetJointType( Rig::GetJointParent( jointType ).first );
    
    // Set the offset, if any
    joint->offsetX = restPoseJoint.offset[0];

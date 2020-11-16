@@ -3,6 +3,7 @@
 
 #include <array>
 #include <unordered_map>
+#include <vector>
 #include <mutex>
 
 // Global strings
@@ -47,8 +48,11 @@ struct Joint
    // Not all joints need this so it's okay to leave at zero.
    double roll = 0.;
    
-   // Some joints, such as hips and shoulders, have offsets from their parents.
-   // This is to be interpreted as an offset vector relative to the parent.
+   // Some joints, such as hips and shoulders, have offsets from their parents. This isn't
+   // anatomically correct (particularly for the shoulders which have a clavicle bone) but
+   // this is what we have for now.
+   // This is to be interpreted as an absolute offset relative to the parent, with
+   // all parent rotations already accounted for (so don't apply the parent's rotation to these offsets).
    std::array< double, 3 > offset = { 0 };
 };
 
@@ -108,8 +112,8 @@ struct Rig
    static const size_t MAX_OFFSETS_DIMENSION = MAX_NUM_JOINT_OFFSETS * 3;
    
    // How our rig is defined.
-   // The pelvis points up, consider this the same as the lowest spine joint
-   union { Joint pelvis; Joint spine1; };
+   // The pelvis points up, consider this the same as the lowest spine joint "spine1"
+   Joint pelvis;
       Joint rHip;
          Joint rKnee;
             Joint rAnkle;
@@ -191,8 +195,9 @@ struct Rig
          return (*it).second;
    }
    // I intentionally made the return 'const char *' instead of 'std::string', because
-   // returning a static character array means it can be passed directly to a C function.
-   static const char * GetJointType( JOINT_TYPE type )
+   // returning a static character array means it can be passed directly to a C function,
+   // which is helpful for the C API
+   static constexpr const char * GetJointType( JOINT_TYPE type )
    {
       switch ( type )
       {
@@ -224,7 +229,7 @@ struct Rig
          return GetJoint( GetJointType( type ) );
    }
    const Joint & GetJoint( std::string type ) const { return const_cast< Rig * >(this)->GetJoint( type ); }
-   Joint & GetJoint( JOINT_TYPE type )
+   constexpr Joint & GetJoint( JOINT_TYPE type )
    {
       switch ( type )
       {
@@ -251,8 +256,8 @@ struct Rig
          default:        return pelvis;
       }
    }
-   const Joint & GetJoint( JOINT_TYPE type ) const { return const_cast< Rig * >(this)->GetJoint( type ); }
-   JointOffset GetJointOffset( JOINT_OFFSET_TYPE type )
+   constexpr const Joint & GetJoint( JOINT_TYPE type ) const { return const_cast< Rig * >(this)->GetJoint( type ); }
+   constexpr JointOffset GetJointOffset( JOINT_OFFSET_TYPE type )
    {
       switch ( type )
       {
@@ -263,33 +268,36 @@ struct Rig
          default:                     return { 0, 0, 0 };
       }
    }
-   const JointOffset GetJointOffset( JOINT_OFFSET_TYPE type ) const { return const_cast< Rig * >(this)->GetJointOffset( type ); }
+   constexpr const JointOffset GetJointOffset( JOINT_OFFSET_TYPE type ) const { return const_cast< Rig * >(this)->GetJointOffset( type ); }
    
-   static JOINT_TYPE GetJointParent( JOINT_TYPE type )
+   // Returns:
+   // first:  parent's joint type
+   // second: true if the joint is attached to the parent's tail, false if the head
+   static constexpr std::pair< JOINT_TYPE, bool > GetJointParent( JOINT_TYPE type )
    {
       switch ( type )
       {
-         case PELVIS:    return JOINT_TYPE_UNKNOWN;
-         case RHIP:      return PELVIS;
-         case RKNEE:     return RHIP;
-         case RANKLE:    return RKNEE;
-         case RTOEBASE:  return RANKLE;
-         case LHIP:      return PELVIS;
-         case LKNEE:     return LHIP;
-         case LANKLE:    return LKNEE;
-         case LTOEBASE:  return LANKLE;
-         case SPINE2:    return PELVIS;
-         case SPINE3:    return SPINE2;
-         case SPINE4:    return SPINE3;
-         case RSHOULDER: return SPINE4;
-         case RELBOW:    return RSHOULDER;
-         case RWRIST:    return RELBOW;
-         case LSHOULDER: return SPINE4;
-         case LELBOW:    return LSHOULDER;
-         case LWRIST:    return LELBOW;
-         case BASENECK:  return SPINE4;
-         case BASEHEAD:  return BASENECK;
-         default:        return JOINT_TYPE_UNKNOWN;
+         case PELVIS:    return std::make_pair( JOINT_TYPE_UNKNOWN, false );
+         case RHIP:      return std::make_pair( PELVIS, false );
+         case RKNEE:     return std::make_pair( RHIP, true );
+         case RANKLE:    return std::make_pair( RKNEE, true );
+         case RTOEBASE:  return std::make_pair( RANKLE, true );
+         case LHIP:      return std::make_pair( PELVIS, false );
+         case LKNEE:     return std::make_pair( LHIP, true );
+         case LANKLE:    return std::make_pair( LKNEE, true );
+         case LTOEBASE:  return std::make_pair( LANKLE, true );
+         case SPINE2:    return std::make_pair( PELVIS, true );
+         case SPINE3:    return std::make_pair( SPINE2, true );
+         case SPINE4:    return std::make_pair( SPINE3, true );
+         case RSHOULDER: return std::make_pair( SPINE4, true );
+         case RELBOW:    return std::make_pair( RSHOULDER, true );
+         case RWRIST:    return std::make_pair( RELBOW, true );
+         case LSHOULDER: return std::make_pair( SPINE4, true );
+         case LELBOW:    return std::make_pair( LSHOULDER, true );
+         case LWRIST:    return std::make_pair( LELBOW, true );
+         case BASENECK:  return std::make_pair( SPINE4, true );
+         case BASEHEAD:  return std::make_pair( BASENECK, true );
+         default:        return std::make_pair( JOINT_TYPE_UNKNOWN, true );
       }
    }
    // This creates a default armature, or rest (bind) pose, that is needed in order to make sense of rig data.
