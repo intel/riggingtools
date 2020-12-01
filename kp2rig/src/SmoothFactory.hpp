@@ -22,6 +22,7 @@ class SmoothFactory
 {
 public:   
    static SMOOTH_TYPE SmoothType( std::string type );
+   static std::string SmoothType( SMOOTH_TYPE type );
    static std::unique_ptr< Smooth > Create( SMOOTH_TYPE type );
 };
 
