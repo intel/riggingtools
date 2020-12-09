@@ -223,9 +223,16 @@ void AnimatedRig::SmoothAllKeypoints( SMOOTH_TYPE type,
    int actualRangeStart = rangeEnd + 1;
    int actualRangeEnd = rangeStart - 1;
    
-   // Sanity check
+   // Sanity checks
    if ( !_frames.size() )
       return;
+   {
+      auto filter = SmoothFactory::Create( type );
+      if ( !filter )
+      {
+         throw std::runtime_error( "Failed to instantiate " + SmoothFactory::SmoothType( type ) + "; try --smooth=none" );
+      }
+   }
 
    // -------------------------------------------------
    // ITERATION 1: Add original XYZ samples from every frame
@@ -253,6 +260,10 @@ void AnimatedRig::SmoothAllKeypoints( SMOOTH_TYPE type,
             if ( i >= _jointSmoothers.size() )
             {
                auto filter = SmoothFactory::Create( type );
+               if ( !filter )
+               {
+                  return;
+               }
                filter->Initialize( NUM_TAPS, NORMALIZED_FREQUENCY );
                _jointSmoothers.emplace_back( std::move(filter) );
             }

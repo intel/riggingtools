@@ -6,10 +6,14 @@ from mathutils import Vector, Quaternion, Matrix
 # This could become a parameter instead of hard-coding.
 adjustForBlender = True
 
-def addSkeleton( restPose,
-   name,
+def addSkeleton( name,
    boneLengths,
    boneOffsets ):
+
+   import rig2pyHelper
+   
+   # Create our rest pose, scaled by bone lengths if provided
+   restPose = rig2pyHelper.createRestPose( "rig2pyBlender", boneLengths )
 
    # Create an armature and enter edit mode
    bpy.ops.object.armature_add( enter_editmode = True,
