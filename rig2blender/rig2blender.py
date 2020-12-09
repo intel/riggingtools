@@ -4,7 +4,6 @@ import math
 import inspect
 
 rigBounds = {}
-restPose = {}
 
 def processCommandLine( argv ):
 
@@ -85,7 +84,7 @@ def onFrame( rigId,
    if rigId not in bpy.data.objects:
       if rigType == "humanoid":
          print( "Adding humanoid '" + rigId + "'" )
-         blenderRig.addSkeleton( restPose, rigId, lengths, offsets )
+         blenderRig.addSkeleton( rigId, lengths, offsets )
       elif rigType == "solidObject":
          print( "Adding solid object '" + rigId + "'" )
          blenderRig.addSolidObject( rigId )         
@@ -127,7 +126,6 @@ if __name__ == "__main__":
       for path in paths:
          sys.path.append( path )
    import rig2pyBlender
-   import rig2pyHelper
 
    # Remove the default stuff
    try:
@@ -150,9 +148,6 @@ if __name__ == "__main__":
    rig2pyBlender.errorCallback( onError )
    rig2pyBlender.boundsCallback( onUpdateBounds )
    rig2pyBlender.frameCallback( onFrame )
-
-   # Create our rest pose
-   restPose = rig2pyHelper.createRestPose( "rig2pyBlender" )
 
    # Load all data from the file (will invoke the callback many times)
    rig2pyBlender.read( args["inputJson"] )
