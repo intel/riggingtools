@@ -4,6 +4,7 @@
 #include <algorithm>
 #include <signal.h>
 #include <map>
+#include <unordered_map>
 #include <sys/types.h>
 #include <fstream>
 #include <iostream>
@@ -83,6 +84,7 @@ int main( int argc, char *argv[] )
       int previousTimestamp = -1;
    };
    std::map< std::string, CharacterMetadata > characterMetadata;
+   std::unordered_map< std::string, int > pose_count;
    
    // Set up our signal handler
    signal( SIGINT, signalHandler );
@@ -134,7 +136,7 @@ int main( int argc, char *argv[] )
    {
       printf( "capturing from STDIN...\n" );
    }
-
+   
    // Until told to quit
    while ( !quit )
    {
@@ -205,6 +207,7 @@ int main( int argc, char *argv[] )
          
          if ( characterPose )
          {
+           // std::cout << "Adding Pose " << characterPose->Name() << std::endl;
             // Get this character's metadata
             CharacterMetadata & metadata = characterMetadata[characterPose->Name()];
             
@@ -245,7 +248,16 @@ int main( int argc, char *argv[] )
 
                try
                {
+                  //std::cout << "Updating characterPoseMap" << std::endl;
+                  auto map_key = characterPose->Name();
+                  //std::cout << map_key << std::endl;
+                  //if ( pose_count.find(map_key) != pose_count.end() )
+                  pose_count[map_key]++;
+                  //else 
+                  //   pose_count.emplace(map_key, 1);
                   animation.AddPose( characterPose->Name(), characterPose );
+            
+                  
                }
                catch( std::runtime_error e )
                {
@@ -254,6 +266,11 @@ int main( int argc, char *argv[] )
             }
          }
       }
+   }
+   //Print Debugging Data
+   for(auto& elem: pose_count)
+   {
+      std::cout << elem.first << " " << elem.second << std::endl;
    }
    
    // Since we're done processing input, make sure all processing is complete
