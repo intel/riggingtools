@@ -205,7 +205,6 @@ int main( int argc, char *argv[] )
          
          if ( characterPose )
          {
-           // std::cout << "Adding Pose " << characterPose->Name() << std::endl;
             // Get this character's metadata
             CharacterMetadata & metadata = characterMetadata[characterPose->Name()];
             
