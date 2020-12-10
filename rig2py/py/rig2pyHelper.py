@@ -95,10 +95,13 @@ def traverseAndUpdate( refDictionary, rootName, rotateOffsets = False ):
    for childBone in thisBone.children:
       traverseAndUpdate( refDictionary, childBone.name )
 
-def createRestPose( moduleName = "rig2py" ):
+def createRestPose( moduleName = "rig2py",
+   boneLengths = None ):
    """
    Returns a <str,Bone> dictionary of Bone objects that represent the rest pose. Calls the rig2py API.
    Usually you only call this once to create a generic rest pose, then scale and pose for each character as needed.
+   @moduleName is an optional name of the python module. This is useful for custom modules such as the one provided for Blender.
+   @boneLengths is an optional array of bone lengths
 
    @returns a <str,Bone> dictionary
    """
@@ -109,6 +112,7 @@ def createRestPose( moduleName = "rig2py" ):
    # Get each joint in the rest-post hierarchy, defined by the rig API,
    # creating associated bones as we do so
    joint = rig2py.getRestPoseHumanoid( "" )
+   boneLengthIndex = 0
    while joint != None:
 
       # Create a new bone.
@@ -117,7 +121,12 @@ def createRestPose( moduleName = "rig2py" ):
       newBone = Bone( joint.name )
       newBone.offset = Vector(( joint.offset[0], joint.offset[1], joint.offset[2] ))
       newBone.rotation = Quaternion(( joint.quaternion[3], joint.quaternion[0], joint.quaternion[1], joint.quaternion[2] ))
-      newBone.tailAbs = Vector(( 0., joint.length, 0. ))
+
+      # Set the tail, applying the bone length if provided
+      if boneLengths != None and boneLengthIndex < len(boneLengths):
+         newBone.tailAbs = Vector(( 0., boneLengths[boneLengthIndex], 0. ))
+      else:
+         newBone.tailAbs = Vector(( 0., joint.length, 0. ))
 
       # If we are not the root joint
       if joint.parentName != "":
@@ -134,6 +143,8 @@ def createRestPose( moduleName = "rig2py" ):
 
       # Get the next joint
       joint = rig2py.getRestPoseHumanoid( newBone.name )
+
+      boneLengthIndex = boneLengthIndex + 1
 
    # Update the hierarchy
    traverseAndUpdate( returnValue, rootName )
