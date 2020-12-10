@@ -72,7 +72,7 @@ std::unique_ptr< Pose > KpJsonImporter::ReadOne()
    {
      
       int timestamp = jsonFrame[ "frameID" ].get< int >();
-      std::cout << "Debugging: Processing FrameID " << std::to_string(timestamp) << std::endl;
+
       // For each character in this frame
       for ( auto & jsonCharacter : jsonFrame[ "players" ] )
       {
@@ -83,8 +83,6 @@ std::unique_ptr< Pose > KpJsonImporter::ReadOne()
          try
          {
             name = jsonCharacter[ "id" ].get<std::string>();
-            std::cout << "PlayerID " << name << std::endl;
-    
             keypointType = jsonFrame[ "poseType" ].get<std::string>();
 
          }
@@ -122,8 +120,6 @@ std::unique_ptr< Pose > KpJsonImporter::ReadOne()
                   if ( valueIndex > kpLayout.size() )
                      break;
                }
-
-               std::cout << "Got keypoints for player " << returnValue->Name() << std::endl;
             }
             catch ( std::domain_error )
             {
@@ -131,10 +127,6 @@ std::unique_ptr< Pose > KpJsonImporter::ReadOne()
                ss << "Frame is incomplete";
                throw std::runtime_error( ss.str() );
             }
-         }
-         else 
-         {
-            std::cout << "Skeleton Size Invalid" << (int)jsonCharacter[ "skeleton" ].size() << std::endl;
          }
       }
    }
