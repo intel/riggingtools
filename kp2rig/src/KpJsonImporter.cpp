@@ -43,7 +43,11 @@ void KpJsonImporter::Open( std::string filename )
    _currentFrameIt = _json.begin();
    if ( _currentFrameIt == _json.end() )
       throw std::runtime_error( "JSON file is empty" );
+
+   // Set our current player iterator
+   UpdateCurrentPlayerIt();
 }
+
 std::unique_ptr< Pose > KpJsonImporter::ReadOne()
 {
    // HEADS UP!
@@ -61,78 +65,89 @@ std::unique_ptr< Pose > KpJsonImporter::ReadOne()
    if ( _json.empty() )
       throw std::runtime_error( "JSON file not opened or is empty" );
 
-   auto & jsonFrame = *_currentFrameIt++;
-   if ( _currentFrameIt == _json.end() )
+   auto &jsonCharacter = *_currentPlayerIt++;
+   auto &jsonFrame = *_currentFrameIt;
+
+   // If we're processing last player, update frame and update player iterator
+   if ( _currentPlayerIt == jsonFrame[ "players" ].end() )
    {
-      _parseComplete = true;
+      _currentFrameIt++;
+      if ( _currentFrameIt == _json.end() )
+         _parseComplete = true;
+      else 
+         UpdateCurrentPlayerIt();
+      
    }
-   
-   // If we have a valid frame
-   if ( !jsonFrame.empty() && jsonFrame.count( "players" ) )
-   {
+ 
+   int timestamp = jsonFrame[ "frameID" ].get< int >();
      
-      int timestamp = jsonFrame[ "frameID" ].get< int >();
+   std::string name;
+   std::string keypointType;
 
-      // For each character in this frame
-      for ( auto & jsonCharacter : jsonFrame[ "players" ] )
-      {
-         std::string name;
-         std::string keypointType;
+   // Get the basics
+   try  
+   {
+      name = jsonCharacter[ "id" ].get<std::string>();
+      keypointType = jsonFrame[ "poseType" ].get<std::string>();
 
-         // Get the basics
-         try
-         {
-            name = jsonCharacter[ "id" ].get<std::string>();
-            keypointType = jsonFrame[ "poseType" ].get<std::string>();
-
-         }
-         catch ( std::domain_error )
-         {
-            std::stringstream ss;
-            ss << "Frame is incomplete";
-            throw std::runtime_error( ss.str() );
-         }
+   }
+   catch ( std::domain_error )
+   {
+         std::stringstream ss;
+         ss << "Frame is incomplete";
+         throw std::runtime_error( ss.str() );
+   }
          
-         // Build a keypoint layout and give it to the importer
-         std::map< KEYPOINT_TYPE, int > kpLayout = KpImporterFactory::GetKeypointMap( keypointType );
-         
-         // Make sure we have a valid skeleton entry
-         if ( jsonCharacter.count( "skeleton" ) &&
+   // Build a keypoint layout and give it to the importer
+   std::map< KEYPOINT_TYPE, int > kpLayout = KpImporterFactory::GetKeypointMap( keypointType );
+   
+   // Make sure we have a valid skeleton entry
+   if ( jsonCharacter.count( "skeleton" ) &&
             jsonCharacter[ "skeleton" ].size() >= kpLayout.size() )
+   {
+      // Create a pose using this information
+      returnValue = PoseFactory::Create( keypointType, kpLayout );
+      returnValue->Name( name );
+      returnValue->Timestamp( timestamp );
+      
+      // Get the keypoints
+      try
+      {
+         size_t valueIndex = 0;
+         for ( auto & jsonKeypoint : jsonCharacter[ "skeleton" ] )
          {
-            // Create a pose using this information
-            returnValue = PoseFactory::Create( keypointType, kpLayout );
-            returnValue->Name( name );
-            returnValue->Timestamp( timestamp );
+            std::array< double, 3 > keypointValue = { jsonKeypoint[0].get<double>() * _unitMeterNorm,
+               jsonKeypoint[1].get<double>() * _unitMeterNorm,
+               jsonKeypoint[2].get<double>() * _unitMeterNorm };
+            returnValue->Keypoint( keypointValue, (int)valueIndex++ );
             
-            // Get the keypoints
-            try
-            {
-               size_t valueIndex = 0;
-               for ( auto & jsonKeypoint : jsonCharacter[ "skeleton" ] )
-               {
-                  std::array< double, 3 > keypointValue = { jsonKeypoint[0].get<double>() * _unitMeterNorm,
-                     jsonKeypoint[1].get<double>() * _unitMeterNorm,
-                     jsonKeypoint[2].get<double>() * _unitMeterNorm };
-                  returnValue->Keypoint( keypointValue, (int)valueIndex++ );
-                  
-                  // Stop if there are more keypoints than expected
-                  if ( valueIndex > kpLayout.size() )
-                     break;
-               }
-            }
-            catch ( std::domain_error )
-            {
-               std::stringstream ss;
-               ss << "Frame is incomplete";
-               throw std::runtime_error( ss.str() );
-            }
+            // Stop if there are more keypoints than expected
+            if ( valueIndex > kpLayout.size() )
+               break;
          }
       }
+      catch ( std::domain_error )
+      {
+         std::stringstream ss;
+         ss << "Frame is incomplete";
+         throw std::runtime_error( ss.str() );
+      }
+   }
+   return returnValue;
+
+}
+
+void KpJsonImporter::UpdateCurrentPlayerIt() {
+   
+   auto & jsonFrame = *_currentFrameIt;
+
+   if ( !jsonFrame.empty() && jsonFrame.count( "players" ) )
+   {
+      _currentPlayerIt = jsonFrame[ "players" ].begin();
    }
    
-   return returnValue;
 }
+
 void KpJsonImporter::Close()
 {
    if ( !_json.empty() )
