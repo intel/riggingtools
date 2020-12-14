@@ -12,6 +12,9 @@ cmake_minimum_required( VERSION 3.14 )
 # Apple stuff to avoid a warning about rpaths
 cmake_policy( SET CMP0042 NEW )
 
+# Filename extensions must be explicit
+cmake_policy( SET CMP0115 NEW )
+
 # Target the 64-bit compiler on Windows. We assume 64-bit for everything
 # and no effort has been made to support 32-bit.
 if(WIN32)
@@ -84,13 +87,18 @@ else()
    find_library( APR_UTIL_LIBRARIES NAMES libaprutil-1 aprutil-1 )
    if ( APR_UTIL_LIBRARIES )
       SET( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D_USE_APR_BASE64_" )
+      MESSAGE( "Using APR utilities for base64" )
    else()
       SET( APR_UTIL_INCLUDE_DIRS "" )
       SET( APR_UTIL_LIBRARIES "" )
-      find_package( PkgConfig QUIET )
-      pkg_check_modules( GLIB2 QUIET glib-2.0 )
+      find_path( GLIB2_INCLUDE_DIRS glib.h PATH_SUFFIXES glib-2.0 )
+      find_library( GLIB2_LIBRARIES NAMES glib-2.0 )
       if ( GLIB2_LIBRARIES )
-         SET( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D_USE_GLIB_BASE64_" )
+         execute_process( COMMAND pkg-config --cflags-only-I glib-2.0 OUTPUT_VARIABLE GLIB_CFLAGS OUTPUT_STRIP_TRAILING_WHITESPACE )
+	 SET( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${GLIB_CFLAGS} -D_USE_GLIB_BASE64_" )
+	 MESSAGE( "Using GLIB2 for base64" )
+      else()
+         MESSAGE( FATAL_ERROR "Could not find base64 implementation (install glib2 or APR-util)" )
       endif()
    endif()
 endif()

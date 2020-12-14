@@ -85,7 +85,7 @@ API_TYPE_NAME( RETURN_CODE ) ReadJson( std::string jsonFilename )
       i >> g_json;
    }
    // For when we move to v3: catch ( nlohmann::json::parse_error e )
-   catch ( std::invalid_argument e )
+   catch ( const std::invalid_argument & e )
    {
       g_lastError = API_TYPE_NAME( BAD_FILE_DATA );
       if ( g_errorDelegate )

@@ -28,7 +28,7 @@ void KpJsonImporter::Open( std::string filename )
       i >> _json;
    }
    // For when we move to v3: catch ( nlohmann::json::parse_error e )
-   catch ( std::invalid_argument e )
+   catch ( std::invalid_argument & e )
    {
       std::stringstream ss;
       ss << "Could not parse '" << filename << "': " << e.what();
@@ -84,7 +84,7 @@ std::unique_ptr< Pose > KpJsonImporter::ReadOne()
             name = jsonCharacter[ "id" ].get<std::string>();
             keypointType = "mop_19";// TODO: This should be specified in the JSON file. Maybe per character or only once; either way I shouldn't need to guess this.
          }
-         catch ( std::domain_error )
+         catch ( std::domain_error & )
          {
             std::stringstream ss;
             ss << "Frame is incomplete";
@@ -119,7 +119,7 @@ std::unique_ptr< Pose > KpJsonImporter::ReadOne()
                      break;
                }
             }
-            catch ( std::domain_error )
+            catch ( std::domain_error & )
             {
                std::stringstream ss;
                ss << "Frame is incomplete";

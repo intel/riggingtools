@@ -283,7 +283,7 @@ size_t KpCsvImporter::ParsePoseData( Pose * poseClass,
                {
                   doubleValue = std::stod( stringValue ) * _unitMeterNorm;
                }
-               catch ( std::invalid_argument e )
+               catch ( std::invalid_argument & e )
                {
                   std::stringstream ss;
                   ss << "Could not parse `" << stringValue.substr( 0, 20 ) << "` as a valid floating-point value. Is this data really `" << poseClass->KpType() << "'?";

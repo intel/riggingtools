@@ -8,7 +8,7 @@ add_executable( rig2cTest
    ${PROJECT_SOURCE_DIR}/../../common/Utility.cpp
    src/main.cpp
    src/StressTest.cpp
-   src/Callbacks )
+   src/Callbacks.cpp )
  
 # Needed for iOS, meaningless for others
 set_target_properties( rig2cTest PROPERTIES MACOSX_BUNDLE_GUI_IDENTIFIER "com.intel.rig2cTest" )
