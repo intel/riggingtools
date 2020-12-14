@@ -20,6 +20,7 @@ If you don't need/want python support then add the following cmake argument:
  - make
  - [gnu](https://gcc.gnu.org/) c++ toolchain, 6.1 or newer
  - [git](https://git-scm.com/)
+ - glib2-dev or apr-utils for base64 encoding/decoding
  - [python-dev (optional)](https://www.python.org/) 
 
 ### Get the code
