@@ -134,7 +134,7 @@ int main( int argc, char *argv[] )
    {
       printf( "capturing from STDIN...\n" );
    }
-   
+
    // Until told to quit
    while ( !quit )
    {
@@ -255,7 +255,7 @@ int main( int argc, char *argv[] )
          }
       }
    }
-
+   
    // Since we're done processing input, make sure all processing is complete
    // before we print our summary and exit
    animation.FlushSegments();
