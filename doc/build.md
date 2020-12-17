@@ -18,7 +18,7 @@ If you don't need/want python support then add the following cmake argument:
 ### Requirements
  - [cmake 3.14 or newer](https://cmake.org/)
  - make
- - [gnu](https://gcc.gnu.org/) c++ toolchain, 6.1 or newer
+ - [gnu](https://gcc.gnu.org/) c++ toolchain, 7.5 or newer
  - [git](https://git-scm.com/)
  - [python-dev (optional)](https://www.python.org/) 
 
