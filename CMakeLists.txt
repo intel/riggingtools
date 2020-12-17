@@ -13,7 +13,9 @@ cmake_minimum_required( VERSION 3.14 )
 cmake_policy( SET CMP0042 NEW )
 
 # Filename extensions must be explicit
-cmake_policy( SET CMP0115 NEW )
+if (${CMAKE_VERSION} VERSION_GREATER "3.20")
+   cmake_policy( SET CMP0115 NEW )
+endif()
 
 # Target the 64-bit compiler on Windows. We assume 64-bit for everything
 # and no effort has been made to support 32-bit.

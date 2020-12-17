@@ -127,6 +127,26 @@
          "leftEar",
          "background"
       ]
+   }, 
+   "mop_14": {
+      "description": "'Modified OpenPose'. This is a 14-keypoint layout based loosely on OpenPose",
+      "type": "humanoid",
+      "layout": [
+         "topHead",
+         "baseNeck",
+         "rightShoulder",
+         "rightElbow",
+         "rightWrist",
+         "leftShoulder",
+         "leftElbow",
+         "leftWrist",
+         "rightHip",
+         "rightKnee",
+         "rightAnkle",
+         "leftHip",
+         "leftKnee",
+         "leftAnkle"
+      ]
    },
    "mop_19": {
       "description": "'Modified OpenPose'. This is a 19-keypoint layout based loosely on OpenPose",
@@ -152,7 +172,7 @@
          "leftEye",
          "leftEar"
       ]
-   },
+   },   
    "solidObject": {
       "description": "Single-joint object such as a ball",
       "type": "solidObject",
