@@ -69,7 +69,7 @@ std::map< KEYPOINT_TYPE, int > KpImporterFactory::GetKeypointMap( std::string kp
             {
                i >> g_kpDescriptor;
             }
-            catch ( jsonParseException_t e )
+            catch ( jsonParseException_t & e )
             {
                g_kpDescriptor = nullptr;
                std::stringstream ss;

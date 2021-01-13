@@ -25,12 +25,14 @@ public:
    virtual void UnitMeterNorm(double v) { _unitMeterNorm = v; }
    
    virtual KpImporter * Clone() const { return new KpJsonImporter( *this ); }
-   
+
 private:
    void OpenJson( std::string jsonFilename );
+   void UpdateCurrentPlayerIt ();
    
    nlohmann::json _json;
    nlohmann::json::iterator _currentFrameIt;
+   nlohmann::json::iterator _currentPlayerIt;
    bool _parseComplete = false;
    std::map< KEYPOINT_TYPE, int > _kpLayout;
    double _unitMeterNorm = 1.0;

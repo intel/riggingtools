@@ -176,7 +176,7 @@ int main( int argc, char *argv[] )
          // Open the file
          importer->Open( filename );
       }
-      catch ( std::runtime_error e )
+      catch ( std::runtime_error & e )
       {
          std::cerr << e.what() << std::endl;
          continue;
@@ -190,7 +190,7 @@ int main( int argc, char *argv[] )
             characterPose = importer->ReadOne();
             suppressError = false;
          }
-         catch( std::runtime_error e )
+         catch( std::runtime_error & e )
          {
             // If this is not the end of the file
             if ( !importer->IsParseComplete() )
@@ -247,7 +247,7 @@ int main( int argc, char *argv[] )
                {
                   animation.AddPose( characterPose->Name(), characterPose );
                }
-               catch( std::runtime_error e )
+               catch( std::runtime_error & e )
                {
                   printf( "%s\n", e.what() );
                }
