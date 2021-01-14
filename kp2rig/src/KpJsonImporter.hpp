@@ -29,6 +29,7 @@ public:
 private:
    void OpenJson( std::string jsonFilename );
    void UpdateCurrentPlayerIt ();
+   void UpdateCurrentFrameIt ();
    
    nlohmann::json _json;
    nlohmann::json::iterator _currentFrameIt;
