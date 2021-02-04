@@ -13,7 +13,7 @@ def addSkeleton( name,
    import rig2pyHelper
    
    # Create our rest pose, scaled by bone lengths if provided
-   restPose = rig2pyHelper.createRestPose( "rig2pyBlender", boneLengths )
+   restPose = rig2pyHelper.createRestPose( "rig2pyBlender", boneLengths, boneOffsets )
 
    # Create an armature and enter edit mode
    bpy.ops.object.armature_add( enter_editmode = True,

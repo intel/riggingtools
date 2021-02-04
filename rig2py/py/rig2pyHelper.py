@@ -96,12 +96,14 @@ def traverseAndUpdate( refDictionary, rootName, rotateOffsets = False ):
       traverseAndUpdate( refDictionary, childBone.name )
 
 def createRestPose( moduleName = "rig2py",
-   boneLengths = None ):
+   boneLengths = None,
+   boneOffsets = None ):
    """
    Returns a <str,Bone> dictionary of Bone objects that represent the rest pose. Calls the rig2py API.
    Usually you only call this once to create a generic rest pose, then scale and pose for each character as needed.
    @moduleName is an optional name of the python module. This is useful for custom modules such as the one provided for Blender.
    @boneLengths is an optional array of bone lengths
+   @boneOffsets is an optional array of bone offsets (shoulders, hips)
 
    @returns a <str,Bone> dictionary
    """
@@ -116,10 +118,20 @@ def createRestPose( moduleName = "rig2py",
    while joint != None:
 
       # Create a new bone.
-      # We'll figure out some values later, but at least capture the length
-      # of the bone as part of the tail vector
       newBone = Bone( joint.name )
-      newBone.offset = Vector(( joint.offset[0], joint.offset[1], joint.offset[2] ))
+
+      # Set the head offset, applying the bone offset if provided
+      if boneOffsets != None:
+         offsetMap = [ "rHip", "lHip", "rShoulder", "lShoulder" ]
+         try:
+            index = offsetMap.index( joint.name )
+            newBone.offset = Vector(( boneOffsets[index * 3 + 0], boneOffsets[index * 3 + 1], boneOffsets[index * 3 + 2] ))
+         except ValueError:
+            newBone.offset = Vector(( joint.offset[0], joint.offset[1], joint.offset[2] ))
+      else:
+         newBone.offset = Vector(( joint.offset[0], joint.offset[1], joint.offset[2] ))
+
+      # Set the bone's rotation
       newBone.rotation = Quaternion(( joint.quaternion[3], joint.quaternion[0], joint.quaternion[1], joint.quaternion[2] ))
 
       # Set the tail, applying the bone length if provided
