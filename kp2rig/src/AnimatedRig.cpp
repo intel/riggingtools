@@ -5,7 +5,7 @@
 #include "Compression.hpp"
 #include "PoseFactory.hpp"
 #include "RigPose.hpp"
-
+#include <iostream>
 // This defines the "window" size of our low-pass filter
 const int NUM_TAPS = 21;
 
@@ -27,7 +27,7 @@ void AnimatedRig::AddPose( std::unique_ptr< Pose > & pose )
 void AnimatedRig::DetermineBoneLengths( std::map< int, std::unique_ptr< Pose > >::iterator & poseIt )
 {
    // For the first MIN_NUM_FRAMES
-   constexpr int MIN_NUM_FRAMES = 5;
+   constexpr int MIN_NUM_FRAMES = 10;
    if ( _rawBoneLengths[ 0 ].size() < MIN_NUM_FRAMES )
    {
       // Generate a RigPose only so we can determine bone lengths
@@ -72,9 +72,36 @@ void AnimatedRig::DetermineBoneLengths( std::map< int, std::unique_ptr< Pose > >
          {
             // Compute and set the average
             auto sum = 0.0;
+            //for ( auto val : rawBoneLength )
+            //   sum += val;
+            //_averagedBoneLengths.push_back( sum / rawBoneLength.size() );
+            auto cnt = 0;
+
             for ( auto val : rawBoneLength )
-               sum += val;
-            _averagedBoneLengths.push_back( sum / rawBoneLength.size() );
+            {
+	    	int median_pos = rawBoneLength.size()/2;
+            	int q1 = rawBoneLength.size()/4;	
+            	int q3 = median_pos+q1;
+                std::cout << "med_pos: " << median_pos << "q1: " << q1 << "q3:  " << q3 << std::endl;
+                std::sort(rawBoneLength.begin(), rawBoneLength.end());
+                double median = rawBoneLength[median_pos];
+                double quart1 = rawBoneLength[q1];
+                double quart3 = rawBoneLength[q3];
+                double iqr = quart3 - quart1;
+                std::cout << "median: " << median << "quart1: " << quart1 << "quart3:  " << quart3 << std::endl;
+                if ( val > (quart1 - (1.5*iqr)) && val < (quart3 + (1.5*iqr)) )
+		{
+		   sum +=val;
+                   cnt++;
+                }
+                else
+                {
+                   std::cout << "val not included in avg " << val << std::endl;
+                }
+             }
+
+            //_averagedBoneLengths.push_back( sum / rawBoneLength.size() );
+            _averagedBoneLengths.push_back( sum / cnt );
          }
          
          // Update all existing poses
