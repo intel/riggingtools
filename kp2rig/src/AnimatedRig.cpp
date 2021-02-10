@@ -8,6 +8,7 @@
 #include <iostream>
 // This defines the "window" size of our low-pass filter
 const int NUM_TAPS = 21;
+const float MAX_LIMB_LENGTH = 0.55; //human femur max length
 
 AnimatedRig::AnimatedRig()
    : _rawBoneLengths( Rig::MAX_NUM_JOINTS + Rig::MAX_NUM_JOINT_OFFSETS, std::vector< double >() )
@@ -27,7 +28,7 @@ void AnimatedRig::AddPose( std::unique_ptr< Pose > & pose )
 void AnimatedRig::DetermineBoneLengths( std::map< int, std::unique_ptr< Pose > >::iterator & poseIt )
 {
    // For the first MIN_NUM_FRAMES
-   constexpr int MIN_NUM_FRAMES = 10;
+   constexpr int MIN_NUM_FRAMES = 20;
    if ( _rawBoneLengths[ 0 ].size() < MIN_NUM_FRAMES )
    {
       // Generate a RigPose only so we can determine bone lengths
@@ -76,32 +77,50 @@ void AnimatedRig::DetermineBoneLengths( std::map< int, std::unique_ptr< Pose > >
             //   sum += val;
             //_averagedBoneLengths.push_back( sum / rawBoneLength.size() );
             auto cnt = 0;
+            std::sort(rawBoneLength.begin(), rawBoneLength.end());
 
             for ( auto val : rawBoneLength )
             {
 	    	int median_pos = rawBoneLength.size()/2;
             	int q1 = rawBoneLength.size()/4;	
             	int q3 = median_pos+q1;
-                std::cout << "med_pos: " << median_pos << "q1: " << q1 << "q3:  " << q3 << std::endl;
-                std::sort(rawBoneLength.begin(), rawBoneLength.end());
+                //std::cout << "med_pos: " << median_pos << "q1: " << q1 << "q3:  " << q3 << std::endl;
+                //std::sort(rawBoneLength.begin(), rawBoneLength.end());
                 double median = rawBoneLength[median_pos];
                 double quart1 = rawBoneLength[q1];
                 double quart3 = rawBoneLength[q3];
                 double iqr = quart3 - quart1;
-                std::cout << "median: " << median << "quart1: " << quart1 << "quart3:  " << quart3 << std::endl;
-                if ( val > (quart1 - (1.5*iqr)) && val < (quart3 + (1.5*iqr)) )
+                //std::cout << "median: " << median << "quart1: " << quart1 << "quart3:  " << quart3 << std::endl;
+                //std::cout << "median: " << median << "       IQR: " << iqr  << std::endl;
+                //if val within +-1.5*IQR bounds and bone length smaller than 55 cm (femur max length)
+                if ( val > (quart1 - (1.5*iqr)) && val < (quart3 + (1.5*iqr)) && val < MAX_LIMB_LENGTH)
 		{
 		   sum +=val;
                    cnt++;
                 }
-                else
-                {
-                   std::cout << "val not included in avg " << val << std::endl;
-                }
+                //for debug
+                //else
+                //{
+                //   std::cout << "val not included in avg " << val << std::endl;
+                //}
              }
 
             //_averagedBoneLengths.push_back( sum / rawBoneLength.size() );
-            _averagedBoneLengths.push_back( sum / cnt );
+            double avg=sum/cnt;
+            //std::cout << "AVG  " << sum/cnt << std::endl;
+            if (avg > MAX_LIMB_LENGTH )
+            {
+               std::cout << "AVG length above MAX_LIMB_LENGTH" << avg << std::endl;
+            }
+            if (std::isnan(avg) == true)
+            {
+               std::stringstream ss;
+               ss << "AVG length NaN. TRY INCREASING MIN_NUM_FRAMES. (there are no limb that meet length bounds) ";
+               throw std::runtime_error( ss.str().c_str() );
+
+               //std::cout << "AVG length NaN. TRY INCREASING MIN_NUM_FRAMES. (there are no limb that meet length bounds) " << std::endl;
+            }
+            _averagedBoneLengths.push_back( avg );
          }
          
          // Update all existing poses
@@ -502,11 +521,15 @@ int AnimatedRig::Write( nlohmann::json & json,
          // we only need one set
          lengths.clear();
 
+         // Generate the final rig if we haven't already (expecting it to check internally)
+         pose->GenerateRig();
+
+
          // Set average bone lengths
          UpdateBoneLengths( pose );
          
          // Generate the final rig if we haven't already (expecting it to check internally)
-         pose->GenerateRig();
+         //pose->GenerateRig();
          
          // Update internal values if needed
          if ( numJointRotationsPerFrame == 0 )
