@@ -99,7 +99,8 @@ TEST_CASE( "basic", "[basic]" )
       CHECK( returnValue == rig_NO_ERROR );
       
       // We need at least one callback
-      (rig_setBoundsCallbackDelegate(utility->GetFunctions()[ "rig_setBoundsCallback" ]))( Callbacks::OnBounds );
+      (rig_setBoundsCallbackDelegate(utility->GetFunctions()[ "rig_setBoundsCallback" ]))( [](auto rigId, auto startTime, auto endTime )
+      { (void)rigId; (void)startTime; (void)endTime; } );
       
       // Read should fail
       returnValue = (rig_readDelegate(utility->GetFunctions()[ "rig_read" ]))( jsonFilename.c_str() );
@@ -123,7 +124,8 @@ TEST_CASE( "basic", "[basic]" )
       CHECK( returnValue == rig_NO_ERROR );
       
       // We need at least one callback
-      (rig_setBoundsCallbackDelegate(utility->GetFunctions()[ "rig_setBoundsCallback" ]))( Callbacks::OnBounds );
+      (rig_setBoundsCallbackDelegate(utility->GetFunctions()[ "rig_setBoundsCallback" ]))( [](auto rigId, auto startTime, auto endTime )
+      { (void)rigId; (void)startTime; (void)endTime; } );
       
       // Read should succeed
       returnValue = (rig_readDelegate(utility->GetFunctions()[ "rig_read" ]))( jsonFilename.c_str() );
@@ -136,7 +138,6 @@ TEST_CASE( "basic", "[basic]" )
    SECTION( "only_bounds_callback" )
    {
       const std::string jsonFilename = g_url;
-      Callbacks::numBoundCallbacks = 0;
       
       Utility * utility = Utility::GetInstance();
       
@@ -148,12 +149,28 @@ TEST_CASE( "basic", "[basic]" )
       returnValue = (rig_initializeDelegate(utility->GetFunctions()[ "rig_initialize" ]))( nullptr );
       CHECK( returnValue == rig_NO_ERROR );
       
-      (rig_setBoundsCallbackDelegate(utility->GetFunctions()[ "rig_setBoundsCallback" ]))( Callbacks::OnBounds );
+      static int numBoundCallbacks;
+      OnBoundsDelegate boundsCallback = [](auto rigId, auto startTimestamp, auto endTimestamp )
+      {
+         ++numBoundCallbacks;
+         
+         // Get the name and type
+         char type[512], name[512];
+         (rig_getRigInfoDelegate(Utility::GetInstance()->GetFunctions()[ "rig_getRigInfo" ]))( "", rigId, "type", type, sizeof(type) );
+         (rig_getRigInfoDelegate(Utility::GetInstance()->GetFunctions()[ "rig_getRigInfo" ]))( "", rigId, "name", name, sizeof(name) );
+
+         CHECK( strlen(type) > 0 );
+         CHECK( strlen(name) > 0 );
+
+         (void)startTimestamp;
+         (void)endTimestamp;
+      };
+      (rig_setBoundsCallbackDelegate(utility->GetFunctions()[ "rig_setBoundsCallback" ]))( boundsCallback );
       
       // Read should succeed
       returnValue = (rig_readDelegate(utility->GetFunctions()[ "rig_read" ]))( jsonFilename.c_str() );
       CHECK( returnValue == rig_NO_ERROR );
-      CHECK( Callbacks::numBoundCallbacks > 0 );
+      CHECK( numBoundCallbacks > 0 );
       
       utility->CloseLib();
    }
@@ -204,7 +221,8 @@ TEST_CASE( "stress", "[stress]" )
       (rig_setErrorCallbackDelegate(utility->GetFunctions()[ "rig_setErrorCallback" ]))( Callbacks::OnError );
       
       // Data callbacks
-      (rig_setBoundsCallbackDelegate(utility->GetFunctions()[ "rig_setBoundsCallback" ]))( Callbacks::OnBounds );
+      (rig_setBoundsCallbackDelegate(utility->GetFunctions()[ "rig_setBoundsCallback" ]))( [](auto rigId, auto startTime, auto endTime )
+      { (void)rigId; (void)startTime; (void)endTime; } );
       (rig_setFrameCallbackDelegate(utility->GetFunctions()[ "rig_setFrameCallback" ]))( Callbacks::OnFrame );
       
       // Read synchronous
@@ -246,7 +264,8 @@ TEST_CASE( "stress", "[stress]" )
       (rig_setErrorCallbackDelegate(utility->GetFunctions()["rig_setErrorCallback"]))(Callbacks::OnError);
 
       // Data callbacks
-      (rig_setBoundsCallbackDelegate(utility->GetFunctions()["rig_setBoundsCallback"]))(Callbacks::OnBounds);
+      (rig_setBoundsCallbackDelegate(utility->GetFunctions()["rig_setBoundsCallback"]))( [](auto rigId, auto startTime, auto endTime )
+      { (void)rigId; (void)startTime; (void)endTime; } );
       (rig_setFrameCallbackDelegate(utility->GetFunctions()["rig_setFrameCallback"]))(Callbacks::OnFrame);
 
       // Read asynchronous
@@ -292,7 +311,8 @@ TEST_CASE( "stress", "[stress]" )
       (rig_setErrorCallbackDelegate(utility->GetFunctions()["rig_setErrorCallback"]))(Callbacks::OnError);
 
       // Data callbacks
-      (rig_setBoundsCallbackDelegate(utility->GetFunctions()["rig_setBoundsCallback"]))(Callbacks::OnBounds);
+      (rig_setBoundsCallbackDelegate(utility->GetFunctions()["rig_setBoundsCallback"]))( [](auto rigId, auto startTime, auto endTime )
+      { (void)rigId; (void)startTime; (void)endTime; } );
       (rig_setFrameCallbackDelegate(utility->GetFunctions()["rig_setFrameCallback"]))(Callbacks::OnFrame);
 
       // Read asynchronous but don't stop

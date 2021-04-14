@@ -36,7 +36,7 @@ extern "C"{
 
    Inputs:
       delegate: the callback. Signature (in C) is OnBoundsDelegate:
-         void(*)( int rigId, int startFrameNumber, int endFrameNumber ) */
+         void(*)( const char * rigId, int startFrameNumber, int endFrameNumber ) */
    API_FUNC_DECLARE( API_TYPE_NAME( VOID ) ) API_FUNC_NAME( setBoundsCallback )( API_ARG_PREFIX
       OnBoundsDelegate delegate );
       

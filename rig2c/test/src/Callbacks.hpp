@@ -16,15 +16,11 @@ class Callbacks
 {
 public:
    static int numFrameCallbacks;
-   static int numBoundCallbacks;
    static std::string errorString;
    
    static void OnError( const char * rigId,
       rig_RETURN_CODE error,
       const char * description );
-   static void OnBounds( const char * rigId,
-      int startTimestamp,
-      int endTimestamp );
    static void OnFrame( const char * rigId,
        int frameTimestamp,
        const double * locationXYZ,

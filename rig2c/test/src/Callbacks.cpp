@@ -4,7 +4,6 @@
 #include "rig2cDelegates.h"
 
 std::string Callbacks::errorString = "";
-int Callbacks::numBoundCallbacks = 0;
 int Callbacks::numFrameCallbacks = 0;
 
 void Callbacks::OnError( const char * rigId,
@@ -15,20 +14,6 @@ void Callbacks::OnError( const char * rigId,
    (void)rigId;
    (void)error;
    (void)description;
-}
-void Callbacks::OnBounds( const char * rigId,
-   int startTimestamp,
-   int endTimestamp )
-{
-   ++numBoundCallbacks;
-   
-   // Get the name and type
-   char type[512], name[512];
-   (rig_getRigInfoDelegate(Utility::GetInstance()->GetFunctions()[ "rig_getRigInfo" ]))( "", rigId, "type", type, sizeof(type) );
-   (rig_getRigInfoDelegate(Utility::GetInstance()->GetFunctions()[ "rig_getRigInfo" ]))( "", rigId, "name", name, sizeof(name) );
-
-   (void)startTimestamp;
-   (void)endTimestamp;
 }
 void Callbacks::OnFrame( const char * rigId,
     int frameTimestamp,

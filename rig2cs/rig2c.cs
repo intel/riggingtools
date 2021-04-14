@@ -178,15 +178,19 @@ public class rig2cs : IDisposable
    public string GetInfo(string key)
    {
       System.Text.StringBuilder value = new System.Text.StringBuilder(512);
-      int bytes = rig2cInterop.rig_getInfo(key, value, value.Capacity);
-      return bytes > 0 ? value.ToString() : null;
+      rig2cInterop.RETURN_CODE returnCode = rig2cInterop.rig_getInfo("", key, value, value.Capacity);
+      if (returnCode != rig2cInterop.RETURN_CODE.NO_ERROR)
+         throw new ApplicationException("Some error happened in rig2c, should probably report something more useful here ;)");
+      return value.ToString();
    }
    public string GetRigInfo( string rigId,
       string key )
    {
       System.Text.StringBuilder value = new System.Text.StringBuilder(512);
-      int bytes = rig2cInterop.rig_getRigInfo( rigId, key, value, value.Capacity );
-      return bytes>0 ? value.ToString() : null;
+      rig2cInterop.RETURN_CODE returnCode = rig2cInterop.rig_getRigInfo( "", rigId, key, value, value.Capacity );
+      if (returnCode != rig2cInterop.RETURN_CODE.NO_ERROR)
+          throw new ApplicationException("Some error happened in rig2c, should probably report something more useful here ;)");
+      return value.ToString();
    }
    public void Start( string url )
    {
