@@ -71,12 +71,14 @@ public static class rig2cInterop
       IntPtr joint );
 
    [DllImport(LIB_NAME)]
-   public static extern int rig_getInfo( string key,
+   public static extern RETURN_CODE rig_getInfo( string url,
+      string key,
       System.Text.StringBuilder value,
       int valueSize );
 
    [DllImport(LIB_NAME)]
-   public static extern int rig_getRigInfo(string rigId,
+   public static extern RETURN_CODE rig_getRigInfo( string url,
+      string rigId,
       string key,
       System.Text.StringBuilder value,
       int valueSize);
