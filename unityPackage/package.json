@@ -1,0 +1,20 @@
+{
+  "name": "com.riggingtools.skeletons",
+  "version": "1.2.2",
+  "displayName": "Skeleton Loader",
+  "description": "Package to load Skeleton data created by riggingtools via kp2rig.\n\nPlease add a StreamAssets folder to your project and place the skel.json files within it.",
+  "unity": "2020.3",
+  "author": {
+    "name": "Intel, Milan Cengija",
+    "email": "milan.cengija@intel.com",
+    "url": "https://intel.com"
+  },
+  "dependencies": {
+    "com.unity.nuget.newtonsoft-json": "2.0.0",
+    "com.unity.textmeshpro": "3.0.1",
+    "com.unity.timeline": "1.4.6",
+    "com.unity.cinemachine": "2.7.4"
+  },
+  "type": "tool",
+  "unityRelease": "0f1"
+}
