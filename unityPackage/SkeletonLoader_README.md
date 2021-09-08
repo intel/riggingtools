@@ -6,6 +6,12 @@ A simple unity package that will allow you to visualize Skeleton json data withi
 
 ## How-To
 
+First, copy the rig2cs folder from riggingtools repo into your unity project.
+
+Example: Scripts/rig2cs
+
+Then:
+
 Add the git URL to your unity project by going to Window > Package Manager > Click + > Add package from git URL > Paste URL
 
 OR

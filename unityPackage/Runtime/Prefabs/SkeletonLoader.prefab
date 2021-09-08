@@ -76,7 +76,7 @@ MonoBehaviour:
   originalFrame: 0
   CurrentFrame: 0
   FrameCount: 0
-  url: NFL/seg_91888.json
+  url: 
   appliedURL: 
   defaultPrefabKey: humanoid
   prefabs:
