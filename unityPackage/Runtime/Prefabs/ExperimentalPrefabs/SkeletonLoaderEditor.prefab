@@ -1,0 +1,326 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &6085396822231057829
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6085396822231057831}
+  - component: {fileID: 6085396822231057825}
+  - component: {fileID: 6085396822231057830}
+  - component: {fileID: 6085396822231057824}
+  m_Layer: 0
+  m_Name: SkeletonLoaderEditor
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6085396822231057831
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6085396822231057829}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6085396822231057825
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6085396822231057829}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bda8def14968e45f39c706660a6b395a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  frame: 200
+  start_frame: 0
+  end_frame: 1111
+  frames_per_second: 30
+  looping: 0
+  loop_delay: 0.1
+  loop_delay_countdown: 0.1
+  paused: 0
+  random: 0
+  ShowGUIButtons: 0
+--- !u!114 &6085396822231057830
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6085396822231057829}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3f3ac08b3cf2bf34f8526aecd7f791c4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  headerData:
+    header:
+      endFrame: 92998
+      fps: 30
+      startFrame: 91888
+  rigsData:
+    rigs:
+    - id: 111
+      type: humanoid
+      startFrame: 92239
+      endFrame: 92277
+    - id: 12
+      type: humanoid
+      startFrame: 92853
+      endFrame: 92887
+    - id: 121
+      type: humanoid
+      startFrame: 
+      endFrame: 92729
+    - id: 131
+      type: humanoid
+      startFrame: 
+      endFrame: 92769
+    - id: 135
+      type: humanoid
+      startFrame: 92770
+      endFrame: 92841
+    - id: 141
+      type: humanoid
+      startFrame: 
+      endFrame: 92381
+    - id: 172
+      type: humanoid
+      startFrame: 92456
+      endFrame: 
+    - id: 181
+      type: humanoid
+      startFrame: 92868
+      endFrame: 92971
+    - id: 182
+      type: humanoid
+      startFrame: 92929
+      endFrame: 92995
+    - id: 192
+      type: humanoid
+      startFrame: 92182
+      endFrame: 92941
+    - id: 202
+      type: humanoid
+      startFrame: 92227
+      endFrame: 
+    - id: 212
+      type: humanoid
+      startFrame: 
+      endFrame: 
+    - id: 232
+      type: humanoid
+      startFrame: 92305
+      endFrame: 
+    - id: 251
+      type: humanoid
+      startFrame: 92799
+      endFrame: 92833
+    - id: 271
+      type: humanoid
+      startFrame: 92283
+      endFrame: 92501
+    - id: 281
+      type: humanoid
+      startFrame: 
+      endFrame: 92661
+    - id: 31
+      type: humanoid
+      startFrame: 92473
+      endFrame: 
+    - id: 311
+      type: humanoid
+      startFrame: 92869
+      endFrame: 92885
+    - id: 322
+      type: humanoid
+      startFrame: 
+      endFrame: 
+    - id: 341
+      type: humanoid
+      startFrame: 92871
+      endFrame: 92881
+    - id: 352
+      type: humanoid
+      startFrame: 
+      endFrame: 92381
+    - id: 382
+      type: humanoid
+      startFrame: 
+      endFrame: 92497
+    - id: 401
+      type: humanoid
+      startFrame: 92253
+      endFrame: 92367
+    - id: 442
+      type: humanoid
+      startFrame: 92281
+      endFrame: 
+    - id: 492
+      type: humanoid
+      startFrame: 
+      endFrame: 92987
+    - id: 532
+      type: humanoid
+      startFrame: 
+      endFrame: 
+    - id: 542
+      type: humanoid
+      startFrame: 
+      endFrame: 92507
+    - id: 552
+      type: humanoid
+      startFrame: 
+      endFrame: 92579
+    - id: 561
+      type: humanoid
+      startFrame: 92321
+      endFrame: 
+    - id: 562
+      type: humanoid
+      startFrame: 92245
+      endFrame: 
+    - id: 565
+      type: humanoid
+      startFrame: 92766
+      endFrame: 92863
+    - id: 641
+      type: humanoid
+      startFrame: 
+      endFrame: 92979
+    - id: 642
+      type: humanoid
+      startFrame: 92348
+      endFrame: 92991
+    - id: 645
+      type: humanoid
+      startFrame: 92560
+      endFrame: 92599
+    - id: 661
+      type: humanoid
+      startFrame: 
+      endFrame: 92435
+    - id: 721
+      type: humanoid
+      startFrame: 92271
+      endFrame: 
+    - id: 731
+      type: humanoid
+      startFrame: 92368
+      endFrame: 
+    - id: 741
+      type: humanoid
+      startFrame: 
+      endFrame: 
+    - id: 761
+      type: humanoid
+      startFrame: 
+      endFrame: 
+    - id: 781
+      type: humanoid
+      startFrame: 
+      endFrame: 92991
+    - id: 791
+      type: humanoid
+      startFrame: 92494
+      endFrame: 
+    - id: 795
+      type: humanoid
+      startFrame: 92864
+      endFrame: 92915
+    - id: 81
+      type: humanoid
+      startFrame: 92211
+      endFrame: 
+    - id: 811
+      type: humanoid
+      startFrame: 
+      endFrame: 92859
+    - id: 841
+      type: humanoid
+      startFrame: 92790
+      endFrame: 92841
+    - id: 871
+      type: humanoid
+      startFrame: 
+      endFrame: 92867
+    - id: 912
+      type: humanoid
+      startFrame: 
+      endFrame: 
+    - id: 922
+      type: humanoid
+      startFrame: 
+      endFrame: 
+    - id: 952
+      type: humanoid
+      startFrame: 
+      endFrame: 92798
+    - id: 971
+      type: humanoid
+      startFrame: 92959
+      endFrame: 
+    - id: 975
+      type: humanoid
+      startFrame: 92654
+      endFrame: 92695
+    - id: ball
+      type: solidObject
+      startFrame: 
+      endFrame: 
+  originalFrame: 92088
+  CurrentFrame: 201
+  FrameCount: 1111
+  url: 
+  appliedURL: 
+  defaultPrefabKey: humanoid
+  prefabs:
+  - key: humanoid
+    prefab: {fileID: 3717691934414868650, guid: 2b32c956e965d46f0808a7d48bfeb19e,
+      type: 3}
+  - key: solidObject
+    prefab: {fileID: 4862925816992613580, guid: 6e9f53a31a0fb024798bfc84fd634e49,
+      type: 3}
+  followSharpness: 0.4
+  timeSource: {fileID: 6085396822231057825}
+  skinnedMeshVisible: 0
+  playerIDVisible: 0
+  verbose: 0
+  globalCorrections: 0
+  corrections: []
+  errorParsePerFrameMax: 2147483647
+  boundsParsePerFrameMax: 2147483647
+  frameParsePerFrameMax: 2147483647
+  playerIds: []
+--- !u!114 &6085396822231057824
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6085396822231057829}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0a7526500bbc7cf4dbd6c7cbb15eaa76, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  captureFrameRate: 30
+  currentFrame: 200
+  RigMover: {fileID: 6085396822231057830}
+  frameTime: {fileID: 6085396822231057825}
+  timeline: {fileID: 0}
+  showDebugLog: 0
