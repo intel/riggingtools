@@ -65,6 +65,8 @@ Depends on [Intel Integrated Performance Primitives (IPP)](https://software.inte
 [**worldCoordinates**](samples/worldCoordinates/README.md) - Outputs rig keypoints to files as absolute Cartesian coordinates, and plots one of the frames.
 Depends on python helper scripts from [rig2py](rig2py/py/), matplotlib, and mathutils
 
+[**unityPackage**](unityPackage/SkeletonLoader_README.md) - If you have generated a rig2cs binary, and generated the sample JSON file from [**worldCoordinates**](samples/worldCoordinates/README.md), then you can take the contents within unityPackage folder and load it into your Unity Project.
+
 # Tests
 **rig2cTest** - C++ "catch" unit test for rig2c
 

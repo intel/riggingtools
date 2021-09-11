@@ -1,0 +1,119 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &8776481276026287784
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8776481276026287786}
+  - component: {fileID: 8776481276026287789}
+  - component: {fileID: 8776481276026287787}
+  m_Layer: 0
+  m_Name: SkeletonLoader
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8776481276026287786
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8776481276026287784}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8776481276026287789
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8776481276026287784}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bda8def14968e45f39c706660a6b395a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  frame: 0
+  start_frame: 0
+  end_frame: 0
+  frames_per_second: 30
+  looping: 1
+  loop_delay: 0.1
+  loop_delay_countdown: 0.1
+  paused: 0
+  random: 0
+  ShowGUIButtons: 0
+--- !u!114 &8776481276026287787
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8776481276026287784}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a7c11669443a3d44cb37238a9bef2200, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  headerData:
+    header:
+      endFrame: 0
+      fps: 0
+      startFrame: 0
+  rigsData:
+    rigs: []
+  originalFrame: 0
+  CurrentFrame: 0
+  FrameCount: 0
+  url: 
+  appliedURL: 
+  defaultPrefabKey: humanoid
+  prefabs:
+  - key: humanoid
+    prefab: {fileID: 2794196596325515509, guid: 2dab3d0aca12842c28b03077947d0b85,
+      type: 3}
+  - key: solidObject
+    prefab: {fileID: 4862925816992613580, guid: 6e9f53a31a0fb024798bfc84fd634e49,
+      type: 3}
+  followSharpness: 0.4
+  timeSource: {fileID: 8776481276026287789}
+  skinnedMeshVisible: 0
+  playerIDVisible: 0
+  verbose: 0
+  globalCorrections: 0
+  corrections:
+  - {x: 0, y: 0, z: 0}
+  - {x: 0, y: 0, z: 0}
+  - {x: 0, y: 0, z: 0}
+  - {x: 0, y: 0, z: 0}
+  - {x: 0, y: 0, z: 0}
+  - {x: 0, y: 0, z: 0}
+  - {x: 0, y: 0, z: 0}
+  - {x: 0, y: 0, z: 0}
+  - {x: 0, y: 0, z: 0}
+  - {x: 0, y: 0, z: 0}
+  - {x: 0, y: 0, z: 0}
+  - {x: 0, y: 0, z: 0}
+  - {x: 0, y: 0, z: 0}
+  - {x: 0, y: 0, z: 0}
+  - {x: 0, y: 0, z: 0}
+  - {x: 0, y: 0, z: 0}
+  - {x: 0, y: 0, z: 0}
+  - {x: 0, y: 0, z: 0}
+  - {x: 0, y: 0, z: 0}
+  - {x: 0, y: 0, z: 0}
+  errorParsePerFrameMax: 15
+  boundsParsePerFrameMax: 30
+  frameParsePerFrameMax: 500
+  playerIds: []
