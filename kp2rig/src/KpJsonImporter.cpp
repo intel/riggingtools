@@ -65,17 +65,16 @@ std::unique_ptr< Pose > KpJsonImporter::ReadOne()
    if ( _json.empty() )
       throw std::runtime_error( "JSON file not opened or is empty" );
 
-    auto &jsonFrame = *_currentFrameIt;
+   auto &jsonFrame = *_currentFrameIt;
 
-    // If player array is empty or we're at the end of the array, 
-    // move to next frame and reset player itr
+   // If player array is empty or we're at the end of the array, 
+   // move to next frame and reset player itr
    if ( _currentPlayerIt == jsonFrame[ "players" ].end())
    {
       UpdateCurrentFrameIt();
    }
    else 
    {
-
       auto &jsonCharacter = *_currentPlayerIt++;
 
       int timestamp = jsonFrame[ "frameID" ].get< int >();
@@ -88,13 +87,12 @@ std::unique_ptr< Pose > KpJsonImporter::ReadOne()
       {
          name = jsonCharacter[ "id" ].get<std::string>();
          keypointType = jsonFrame[ "poseType" ].get<std::string>();
-
       }
       catch ( std::domain_error & )
       {
-            std::stringstream ss;
-            ss << "Frame is incomplete";
-            throw std::runtime_error( ss.str() );
+         std::stringstream ss;
+         ss << "Frame is incomplete";
+         throw std::runtime_error( ss.str() );
       }
          
       // Build a keypoint layout and give it to the importer
@@ -102,7 +100,7 @@ std::unique_ptr< Pose > KpJsonImporter::ReadOne()
       
       // Make sure we have a valid skeleton entry
       if ( jsonCharacter.count( "skeleton" ) &&
-               jsonCharacter[ "skeleton" ].size() >= kpLayout.size() )
+         jsonCharacter[ "skeleton" ].size() >= kpLayout.size() )
       {
          // Create a pose using this information
          returnValue = PoseFactory::Create( keypointType, kpLayout );
@@ -135,18 +133,16 @@ std::unique_ptr< Pose > KpJsonImporter::ReadOne()
    }
    
    return returnValue;
-
 }
 
-void KpJsonImporter::UpdateCurrentPlayerIt() {
-   
+void KpJsonImporter::UpdateCurrentPlayerIt()
+{   
    auto & jsonFrame = *_currentFrameIt;
 
    if ( !jsonFrame.empty() && jsonFrame.count( "players" ) )
    {
       _currentPlayerIt = jsonFrame[ "players" ].begin();
-   }
-   
+   }   
 }
 
 void KpJsonImporter::UpdateCurrentFrameIt() {
